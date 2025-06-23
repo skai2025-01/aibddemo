@@ -12,38 +12,48 @@
             background-color: #f9fafb; /* Very light gray */
             color: #374151; /* Darker gray text */
         }
-        /* Sidebar is hidden by default on mobile and appears on md: screens */
+        /* Sidebar styling */
         .sidebar {
-            width: 240px; /* Slightly narrower sidebar */
-            background-color: #ffffff; /* White sidebar */
-            color: #4b5563; /* Slate gray text for sidebar */
-            padding: 1.5rem 1rem; /* Adjusted padding */
+            width: 240px;
+            background-color: #ffffff;
+            color: #4b5563;
+            padding: 1.5rem 1rem;
             min-height: calc(100vh - 72px); /* Adjust for header height */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Softer shadow */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             position: fixed;
-            top: 72px; /* Below the header */
+            top: 72px;
             left: 0;
             bottom: 0;
             overflow-y: auto;
-            border-right: 1px solid #e5e7eb; /* Subtle right border */
-            z-index: 20; /* Ensure it's above content when visible */
-            display: none; /* Hidden by default on mobile */
+            border-right: 1px solid #e5e7eb;
+            z-index: 20; /* Ensure it's above content */
+
+            /* Mobile: hidden by default, slide in from left */
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
         }
-        /* Make sidebar visible on medium screens and up */
+        /* Class to show sidebar on mobile */
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        /* Desktop: always visible */
         @media (min-width: 768px) {
             .sidebar {
-                display: block;
+                transform: translateX(0); /* Always visible on desktop */
+                display: block !important; /* Override JS hide on desktop */
             }
         }
 
         .main-content {
-            margin-left: 0; /* No margin-left on mobile */
+            margin-left: 0; /* No margin-left on mobile by default */
             padding: 1.5rem; /* Reduced padding for mobile */
-            background-color: #f9fafb; /* Consistent background */
-            min-height: calc(100vh - 72px); /* Adjust for header height */
+            background-color: #f9fafb;
+            min-height: calc(100vh - 72px);
             width: 100%; /* Full width on mobile */
+            transition: margin-left 0.3s ease-in-out;
         }
-        /* Adjust main content margin on medium screens and up to account for sidebar */
+        /* Adjust main content margin on desktop to account for sidebar */
         @media (min-width: 768px) {
             .main-content {
                 margin-left: 240px;
@@ -53,73 +63,73 @@
 
         .nav-item {
             display: block;
-            padding: 0.6rem 0.8rem; /* Smaller padding for nav items */
-            margin-bottom: 0.4rem; /* Reduced margin */
-            border-radius: 0.4rem; /* Slightly less rounded */
+            padding: 0.6rem 0.8rem;
+            margin-bottom: 0.4rem;
+            border-radius: 0.4rem;
             transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
             font-weight: 500;
-            font-size: 0.9rem; /* Smaller nav text */
+            font-size: 0.9rem;
         }
         .nav-item:hover {
-            background-color: #eff6ff; /* Light blue hover */
-            color: #2563eb; /* Blue text on hover */
+            background-color: #eff6ff;
+            color: #2563eb;
         }
         .nav-item.active {
-            background-color: #2563eb; /* Blue-600 */
+            background-color: #2563eb;
             color: white;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtler shadow */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         .card {
             background-color: white;
-            border-radius: 0.8rem; /* Slightly less rounded for sharper look */
-            padding: 1.5rem; /* Adjusted padding for cards too */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Much softer shadow */
-            margin-bottom: 1.5rem; /* Consistent spacing */
-            border: 1px solid #f3f4f6; /* Very subtle border */
+            border-radius: 0.8rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            border: 1px solid #f3f4f6;
         }
         .table-custom {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem; /* Reduced margin */
-            font-size: 0.8rem; /* Even smaller table text */
+            margin-top: 1rem;
+            font-size: 0.8rem;
         }
         .table-custom th, .table-custom td {
-            padding: 0.6rem 0.8rem; /* Smaller padding */
+            padding: 0.6rem 0.8rem;
             text-align: left;
-            border-bottom: 1px solid #e5e7eb; /* Lighter border */
+            border-bottom: 1px solid #e5e7eb;
         }
         .table-custom th {
-            background-color: #f3f4f6; /* Lighter gray background for headers */
+            background-color: #f3f4f6;
             font-weight: 600;
-            color: #4b5563; /* Slate-600 */
+            color: #4b5563;
             text-transform: uppercase;
-            font-size: 0.75rem; /* Smaller header text */
+            font-size: 0.75rem;
         }
         .table-custom tbody tr:hover {
-            background-color: #fcfcfd; /* Very subtle hover */
+            background-color: #fcfcfd;
         }
         .form-input {
             width: 100%;
-            padding: 0.5rem 0.8rem; /* Smaller padding */
-            border: 1px solid #d1d5db; /* Lighter border */
-            border-radius: 0.4rem; /* Slightly less rounded */
-            font-size: 0.85rem; /* Smaller font size */
-            margin-bottom: 0.7rem; /* Reduced margin */
-            box-shadow: inset 0 0px 1px rgba(0,0,0,0.04); /* Subtler inner shadow */
+            padding: 0.5rem 0.8rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.4rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.7rem;
+            box-shadow: inset 0 0px 1px rgba(0,0,0,0.04);
             transition: border-color 0.2s ease;
         }
         .form-input:focus {
             outline: none;
-            border-color: #3b82f6; /* Blue-500 */
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); /* Softer focus ring */
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
         .btn-action {
-            padding: 0.4rem 0.8rem; /* Smaller button padding */
-            border-radius: 0.4rem; /* Slightly less rounded */
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.4rem;
             font-weight: 600;
             transition: all 0.2s ease-in-out;
-            font-size: 0.75rem; /* Smaller button text */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* Softer shadow */
+            font-size: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
         .btn-blue {
             background-color: #3b82f6;
@@ -157,7 +167,7 @@
             margin-top: 0.75rem; /* Space below title on mobile */
             display: flex;
             flex-wrap: wrap; /* Allow wrapping on small screens */
-            justify-center;
+            justify-content: center;
             gap: 0.5rem; /* Small gap between buttons on mobile */
         }
 
@@ -178,13 +188,47 @@
                 font-size: 0.9rem; /* Adjust font size for desktop header subtitle */
             }
         }
+
+        /* Mobile Menu Toggle Button Styling */
+        .mobile-menu-button {
+            background: none;
+            border: none;
+            color: #2563eb; /* Blue-600 */
+            font-size: 1.75rem; /* Larger icon */
+            cursor: pointer;
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 30; /* Ensure it's above header content */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem; /* Make it easier to tap */
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+        }
+        .mobile-menu-button:hover {
+            background-color: #eff6ff; /* Light blue on hover */
+        }
+        @media (min-width: 768px) {
+            .mobile-menu-button {
+                display: none; /* Hide on desktop */
+            }
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
     <!-- Header -->
     <header class="bg-white text-gray-800 p-3 shadow-md z-10 w-full fixed top-0 left-0 border-b border-gray-200">
-        <div class="header-content h-[72px] md:h-auto flex items-center justify-between px-4"> <!-- Ensure header has height -->
-            <div class="flex flex-col items-center md:items-start">
+        <div class="header-content h-[72px] md:h-auto flex items-center justify-between px-4">
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-toggle" class="mobile-menu-button md:hidden">
+                <!-- Hamburger Icon (SVG for better styling) -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+
+            <div class="flex flex-col items-center md:items-start md:ml-0 ml-12"> <!-- Added ml-12 to push content right when menu button is present -->
                 <h1 class="text-2xl font-bold text-blue-700">LGU EBPS Admin Dashboard</h1>
                 <p class="text-base text-gray-600">Welcome, Authorized Personnel!</p>
             </div>
@@ -192,13 +236,11 @@
                 <button class="btn-action bg-blue-500 hover:bg-blue-600 text-white">Logout</button>
             </div>
         </div>
-        <!-- Mobile Sidebar Toggle - Optional for now -->
-        <!-- <button class="md:hidden fixed top-[72px] left-0 p-2 bg-blue-700 text-white z-30">Menu</button> -->
     </header>
 
-    <div class="flex flex-grow mt-[72px]"> <!-- Compensate for fixed header height -->
+    <div class="flex flex-grow mt-[72px]">
         <!-- Sidebar Navigation -->
-        <aside class="sidebar md:block">
+        <aside id="sidebar" class="sidebar">
             <nav>
                 <ul>
                     <li><a href="javascript:void(0)" data-target="dashboard-overview" class="nav-item active">Dashboard Overview</a></li>
@@ -209,13 +251,16 @@
             </nav>
         </aside>
 
+        <!-- Overlay for when sidebar is open on mobile -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-30 z-10 hidden md:hidden"></div>
+
         <!-- Main Content Area -->
         <main class="main-content flex-grow">
 
             <!-- Dashboard Overview Section -->
             <section id="dashboard-overview" class="page-section">
                 <h2 class="text-xl font-bold mb-4 text-gray-800">Dashboard Overview</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> <!-- Adjusted gap -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="card text-center p-4 bg-blue-50">
                         <p class="text-xs text-blue-700 font-semibold mb-1">Total Outstanding Bills</p>
                         <p class="text-2xl font-extrabold text-blue-800">1,250</p>
@@ -320,7 +365,7 @@
 
                 <div class="card">
                     <h3 class="text-lg font-semibold mb-3 text-gray-700">Find Account</h3>
-                    <div class="flex flex-col sm:flex-row gap-2 mb-4"> <!-- Adjusted gap -->
+                    <div class="flex flex-col sm:flex-row gap-2 mb-4">
                         <input type="text" id="account-search-input" class="form-input flex-grow" placeholder="Enter Account No., Name, or Address">
                         <button class="btn-action btn-blue" onclick="searchAccount()">Search Account</button>
                     </div>
@@ -420,6 +465,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileOverlay = document.getElementById('mobile-overlay'); // Get the overlay element
             const navItems = document.querySelectorAll('.sidebar .nav-item');
             const pageSections = document.querySelectorAll('.page-section');
             const searchResultsDiv = document.getElementById('search-results');
@@ -430,7 +478,6 @@
             const accountPaymentHistoryTbody = document.querySelector('#account-details .table-custom tbody:nth-of-type(1)');
             const accountOutstandingBalancesTbody = document.querySelector('#account-details .table-custom tbody:nth-of-type(2)');
             const totalOutstandingBalanceSpan = document.getElementById('total-outstanding-balance');
-
 
             // Function to show a specific section and update active nav item
             const showSection = (targetId) => {
@@ -447,6 +494,12 @@
                 // Hide search results and account details when switching sections
                 searchResultsDiv.classList.add('hidden');
                 accountDetailsDiv.classList.add('hidden');
+
+                // Close sidebar after selecting an item on mobile
+                if (window.innerWidth < 768) { // Only close on mobile sizes
+                    sidebar.classList.remove('open');
+                    mobileOverlay.classList.add('hidden');
+                }
             };
 
             // Event listeners for sidebar navigation
@@ -455,6 +508,18 @@
                     e.preventDefault();
                     showSection(item.dataset.target);
                 });
+            });
+
+            // Mobile menu toggle logic
+            mobileMenuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                mobileOverlay.classList.toggle('hidden'); // Toggle overlay visibility
+            });
+
+            // Close sidebar when clicking on overlay
+            mobileOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                mobileOverlay.classList.add('hidden');
             });
 
             // Initial view (show dashboard overview)
@@ -576,3 +641,4 @@
     </script>
 </body>
 </html>
+
