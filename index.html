@@ -105,21 +105,8 @@
         .btn-view-receipt:hover {
             background-color: #059669; /* Green-600 */
         }
-        .btn-explain-bill {
-            background-color: #f97316; /* Orange-500 */
-            color: white;
-            padding: 0.35rem 0.7rem; /* Further reduced padding */
-            border-radius: 0.4rem; /* Slightly less rounded */
-            font-weight: 500;
-            font-size: 0.75rem; /* Smaller font size */
-            transition: background-color 0.2s ease-in-out;
-            margin-left: 0.4rem; /* Reduced space from other buttons */
-        }
-        .btn-explain-bill:hover {
-            background-color: #ea580c; /* Orange-600 */
-        }
 
-        /* Modal Styles */
+        /* Modal Styles (kept for consistency, though AI features removed) */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -147,7 +134,7 @@
             right: 0.8rem; /* Adjusted position */
             background: none;
             border: none;
-            font-size: 1.3rem; /* Smaller close button */
+            font-size: 1.5rem; /* Smaller close button */
             cursor: pointer;
             color: #475569;
         }
@@ -164,13 +151,16 @@
     <div class="container mx-auto p-4 md:p-6 flex-grow max-w-5xl"> <!-- Reduced overall padding, slightly narrower max-width -->
 
         <!-- Header Section - Common for both pages -->
-        <header class="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800 p-5 rounded-xl shadow-sm mb-8 text-center relative"> <!-- Reduced padding, rounded less, smaller margin -->
-            <h1 class="text-3xl font-extrabold mb-1.5 leading-tight">Subic EBPS</h1> <!-- Smaller font, less margin -->
-            <p class="text-lg font-light" id="header-subtitle">Electronic Bills Payment System</p> <!-- Smaller font -->
+        <header class="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800 p-5 rounded-xl shadow-sm mb-8 text-center relative
+                       sm:flex sm:justify-between sm:items-center sm:text-left sm:p-4">
+            <div class="text-center sm:text-left">
+                <h1 class="text-3xl font-extrabold mb-1.5 leading-tight sm:mb-0 sm:text-2xl">Subic EBPS</h1> <!-- Smaller font on sm+ -->
+                <p class="text-lg font-light sm:text-base" id="header-subtitle">Electronic Bills Payment System</p> <!-- Smaller font on sm+ -->
+            </div>
             <!-- Navigation Links -->
-            <nav class="absolute top-3 right-3"> <!-- Adjusted position -->
-                <a href="javascript:void(0)" data-target="home-page" class="nav-link text-blue-700 hover:text-blue-900 mr-3">Home</a> <!-- Reduced margin -->
-                <a href="javascript:void(0)" data-target="summary-page" class="nav-link text-blue-700 hover:text-blue-900">Summary of Bills</a>
+            <nav class="mt-4 sm:mt-0 sm:static sm:top-auto sm:right-auto flex justify-center sm:justify-end">
+                <a href="javascript:void(0)" data-target="home-page" class="nav-link text-blue-700 hover:text-blue-900 mx-1 sm:mr-3">Home</a> <!-- Centered on mobile, adjusted margins -->
+                <a href="javascript:void(0)" data-target="summary-page" class="nav-link text-blue-700 hover:text-blue-900 mx-1">Summary of Bills</a>
             </nav>
         </header>
 
@@ -308,7 +298,6 @@
                             <td><span class="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Unpaid</span></td> <!-- Smaller padding/font -->
                             <td>
                                 <button class="btn-primary">Pay</button>
-                                <button class="btn-explain-bill" data-bill-type="Real Property Tax" data-bill-period="CY 2025">Explain Bill ✨</button>
                             </td>
                             <td></td>
                         </tr>
@@ -322,7 +311,6 @@
                             <td><span class="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Unpaid</span></td>
                             <td>
                                 <button class="btn-primary">Pay</button>
-                                <button class="btn-explain-bill" data-bill-type="Business Permit Renewal Fee" data-bill-period="2025">Explain Bill ✨</button>
                             </td>
                             <td></td>
                         </tr>
@@ -335,7 +323,6 @@
                             <td><span class="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Unpaid</span></td>
                             <td>
                                 <button class="btn-primary">Pay</button>
-                                <button class="btn-explain-bill" data-bill-type="Community Tax Certificate" data-bill-period="CY 2025">Explain Bill ✨</button>
                             </td>
                             <td></td>
                         </tr>
@@ -349,7 +336,6 @@
                             <td><span class="px-2 py-0.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Paid</span></td>
                             <td>
                                 <button class="btn-secondary" disabled>Paid</button>
-                                <button class="btn-explain-bill" data-bill-type="Environmental Fee" data-bill-period="Q1 2025">Explain Bill ✨</button>
                             </td>
                             <td><button class="btn-view-receipt">View</button></td>
                         </tr>
@@ -371,7 +357,7 @@
         <p class="text-xs">&copy; 2025 Subic Bay Metropolitan Authority. All rights reserved.</p> <!-- Smaller font -->
     </footer>
 
-    <!-- Bill Explanation Modal -->
+    <!-- Bill Explanation Modal (kept but hidden, no JS interaction) -->
     <div id="bill-explanation-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <button class="modal-close-btn" onclick="closeBillExplanationModal()">×</button>
@@ -391,11 +377,10 @@
             const headerSubtitle = document.getElementById('header-subtitle');
             const navLinks = document.querySelectorAll('.nav-link');
 
+            // Modal elements are no longer actively used, but kept for structural reference
             const billExplanationModal = document.getElementById('bill-explanation-modal');
-            const modalBillTitle = document.getElementById('modal-bill-title');
             const modalBillExplanation = document.getElementById('modal-bill-explanation');
             const modalLoadingIndicator = document.getElementById('modal-loading-indicator');
-            const explainBillButtons = document.querySelectorAll('.btn-explain-bill');
 
             // Function to show a specific page and update header subtitle
             const showPage = (pageId) => {
@@ -428,63 +413,16 @@
                 showPage('home-page'); // Default to home page
             }
 
-            // Function to open the bill explanation modal
+            // Functions to open/close modal are kept but will not be called by any button
             window.openBillExplanationModal = () => {
                 billExplanationModal.classList.remove('hidden');
             };
 
-            // Function to close the bill explanation modal
             window.closeBillExplanationModal = () => {
                 billExplanationModal.classList.add('hidden');
                 modalBillExplanation.textContent = ''; // Clear content
                 modalLoadingIndicator.classList.add('hidden'); // Hide loading
             };
-
-            // Event listeners for "Explain Bill" buttons
-            explainBillButtons.forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    const billType = e.target.dataset.billType;
-                    const billPeriod = e.target.dataset.billPeriod;
-
-                    modalBillTitle.textContent = `Explaining: ${billType} (${billPeriod})`;
-                    modalBillExplanation.textContent = ''; // Clear previous explanation
-                    modalLoadingIndicator.classList.remove('hidden'); // Show loading indicator
-                    openBillExplanationModal();
-
-                    // Call Gemini API
-                    try {
-                        const prompt = `As a helpful public service representative from Subic Bay Metropolitan Authority (SBMA), explain in simple, concise terms what the "${billType}" for the period "${billPeriod}" is, and why someone would need to pay it. Keep the explanation to about 2-3 sentences.`;
-                        let chatHistory = [];
-                        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                        const payload = { contents: chatHistory };
-                        const apiKey = ""; // Canvas will provide this API key in runtime
-                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        const result = await response.json();
-
-                        if (result.candidates && result.candidates.length > 0 &&
-                            result.candidates[0].content && result.candidates[0].content.parts &&
-                            result.candidates[0].content.parts.length > 0) {
-                            const explanationText = result.candidates[0].content.parts[0].text;
-                            modalBillExplanation.textContent = explanationText;
-                        } else {
-                            modalBillExplanation.textContent = 'Could not generate explanation. Please try again later.';
-                            console.error('Gemini API response structure unexpected:', result);
-                        }
-                    } catch (error) {
-                        modalBillExplanation.textContent = 'Failed to fetch explanation due to a network error. Please try again.';
-                        console.error('Error calling Gemini API:', error);
-                    } finally {
-                        modalLoadingIndicator.classList.add('hidden'); // Hide loading indicator
-                    }
-                });
-            });
         });
     </script>
 </body>
