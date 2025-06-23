@@ -163,12 +163,8 @@
             align-items: center; /* Center items on mobile */
             text-align: center;
         }
-        .header-nav {
-            margin-top: 0.75rem; /* Space below title on mobile */
-            display: flex;
-            flex-wrap: wrap; /* Allow wrapping on small screens */
-            justify-content: center;
-            gap: 0.5rem; /* Small gap between buttons on mobile */
+        .header-nav { /* This nav is now effectively removed from header for mobile */
+            display: none; /* Hide on mobile */
         }
 
         @media (min-width: 768px) { /* md breakpoint */
@@ -177,7 +173,8 @@
                 justify-content: space-between; /* Space out elements */
                 text-align: left;
             }
-            .header-nav {
+            .header-nav { /* Show on desktop */
+                display: flex;
                 margin-top: 0;
                 gap: 0.75rem; /* Slightly larger gap on desktop */
             }
@@ -232,7 +229,8 @@
                 <h1 class="text-2xl font-bold text-blue-700">LGU EBPS Admin Dashboard</h1>
                 <p class="text-base text-gray-600">Welcome, Authorized Personnel!</p>
             </div>
-            <div class="header-nav flex items-center">
+            <!-- Logout button is now within sidebar for mobile, and appears here only on desktop -->
+            <div class="header-nav hidden md:flex items-center">
                 <button class="btn-action bg-blue-500 hover:bg-blue-600 text-white">Logout</button>
             </div>
         </div>
@@ -247,6 +245,10 @@
                     <li><a href="javascript:void(0)" data-target="manage-bill-types" class="nav-item">Manage Bill Types</a></li>
                     <li><a href="javascript:void(0)" data-target="search-accounts" class="nav-item">Search Accounts</a></li>
                     <li><a href="javascript:void(0)" data-target="system-logs" class="nav-item">System Logs (Mock)</a></li>
+                    <!-- Logout button moved here for mobile menu -->
+                    <li class="md:hidden mt-4 pt-4 border-t border-gray-200">
+                        <button class="nav-item btn-action bg-red-500 hover:bg-red-600 text-white w-full text-left" onclick="alert('Logged out from mobile menu!');">Logout</button>
+                    </li>
                 </ul>
             </nav>
         </aside>
@@ -467,7 +469,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const sidebar = document.getElementById('sidebar');
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-            const mobileOverlay = document.getElementById('mobile-overlay'); // Get the overlay element
+            const mobileOverlay = document.getElementById('mobile-overlay');
             const navItems = document.querySelectorAll('.sidebar .nav-item');
             const pageSections = document.querySelectorAll('.page-section');
             const searchResultsDiv = document.getElementById('search-results');
@@ -641,4 +643,3 @@
     </script>
 </body>
 </html>
-
