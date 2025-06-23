@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subic EBPS: Electronic Bills Payment System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Lightest gray/almost white background */
+            color: #334155; /* Dark slate gray text */
+        }
+        /* Custom styles for minimalist buttons */
+        .btn-primary {
+            background-color: #3b82f6; /* Blue-500 */
+            color: white;
+            padding: 0.5rem 1.2rem; /* Reduced padding */
+            border-radius: 0.6rem; /* Slightly less rounded */
+            font-weight: 600; /* semi-bold */
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Softer, slightly smaller shadow */
+            border: none; /* Ensure no default borders */
+            font-size: 0.85rem; /* Slightly smaller button text */
+        }
+        .btn-primary:hover {
+            background-color: #2563eb; /* Blue-600 */
+            transform: translateY(-1px); /* Subtle lift on hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+        }
+        .btn-secondary {
+            background-color: #f1f5f9; /* Gray-100 */
+            color: #475569; /* Slate-600 */
+            padding: 0.5rem 1.2rem; /* Reduced padding */
+            border-radius: 0.6rem; /* Slightly less rounded */
+            font-weight: 600; /* semi-bold */
+            transition: all 0.2s ease-in-out;
+            border: 1px solid #cbd5e1; /* Subtle border for definition */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Softer shadow */
+            font-size: 0.85rem; /* Slightly smaller button text */
+        }
+        .btn-secondary:hover {
+            background-color: #e2e8f0; /* Gray-200 */
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        /* Card styling for modern look */
+        .bill-card {
+            background-color: white;
+            border-radius: 1rem; /* Slightly less rounded */
+            padding: 1.5rem; /* Reduced padding */
+            box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.04), 0 3px 8px -2px rgba(0, 0, 0, 0.02); /* Lighter, broader shadow */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            border: 1px solid #f1f5f9; /* Very subtle border */
+        }
+        .nav-link {
+            padding: 0.4rem 0.8rem; /* Reduced padding */
+            border-radius: 0.4rem; /* Slightly less rounded */
+            transition: background-color 0.2s ease-in-out;
+            font-weight: 500;
+            font-size: 0.9rem; /* Slightly smaller text */
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15); /* Lighter hover */
+        }
+        /* Table specific styles for a clean look */
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.2rem; /* Reduced margin */
+        }
+        .bill-table th, .bill-table td {
+            padding: 0.8rem 0.9rem; /* Reduced padding */
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0; /* Light border for rows */
+            font-size: 0.85rem; /* Smaller table text */
+        }
+        .bill-table th {
+            background-color: #e2e8f0; /* Gray-200 */
+            font-weight: 600;
+            color: #475569; /* Slate-600 */
+            font-size: 0.8rem; /* Even smaller header text */
+            text-transform: uppercase; /* Ensure consistency with admin dashboard */
+        }
+        .bill-table tbody tr:last-child {
+            border-bottom: none;
+        }
+        .bill-table tbody tr:hover {
+            background-color: #fcfcfd; /* Subtle hover effect */
+        }
+        .btn-view-receipt {
+            background-color: #10b981; /* Green-500 */
+            color: white;
+            padding: 0.35rem 0.7rem; /* Further reduced padding */
+            border-radius: 0.4rem; /* Slightly less rounded */
+            font-weight: 500;
+            font-size: 0.75rem; /* Smaller font size */
+            transition: background-color 0.2s ease-in-out;
+        }
+        .btn-view-receipt:hover {
+            background-color: #059669; /* Green-600 */
+        }
+        .btn-explain-bill {
+            background-color: #f97316; /* Orange-500 */
+            color: white;
+            padding: 0.35rem 0.7rem; /* Further reduced padding */
+            border-radius: 0.4rem; /* Slightly less rounded */
+            font-weight: 500;
+            font-size: 0.75rem; /* Smaller font size */
+            transition: background-color 0.2s ease-in-out;
+            margin-left: 0.4rem; /* Reduced space from other buttons */
+        }
+        .btn-explain-bill:hover {
+            background-color: #ea580c; /* Orange-600 */
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* Slightly lighter overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 1.8rem; /* Reduced padding */
+            border-radius: 0.8rem; /* Slightly less rounded */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18); /* Slightly softer shadow */
+            width: 90%;
+            max-width: 450px; /* Slightly narrower modal */
+            position: relative;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 0.8rem; /* Adjusted position */
+            right: 0.8rem; /* Adjusted position */
+            background: none;
+            border: none;
+            font-size: 1.3rem; /* Smaller close button */
+            cursor: pointer;
+            color: #475569;
+        }
+        .modal-content h3 {
+            font-size: 1.15rem; /* Smaller modal title */
+        }
+        .modal-content p {
+            font-size: 0.9rem; /* Smaller modal text */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 md:p-6 flex-grow max-w-5xl"> <!-- Reduced overall padding, slightly narrower max-width -->
+
+        <!-- Header Section - Common for both pages -->
+        <header class="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800 p-5 rounded-xl shadow-sm mb-8 text-center relative"> <!-- Reduced padding, rounded less, smaller margin -->
+            <h1 class="text-3xl font-extrabold mb-1.5 leading-tight">Subic EBPS</h1> <!-- Smaller font, less margin -->
+            <p class="text-lg font-light" id="header-subtitle">Electronic Bills Payment System</p> <!-- Smaller font -->
+            <!-- Navigation Links -->
+            <nav class="absolute top-3 right-3"> <!-- Adjusted position -->
+                <a href="javascript:void(0)" data-target="home-page" class="nav-link text-blue-700 hover:text-blue-900 mr-3">Home</a> <!-- Reduced margin -->
+                <a href="javascript:void(0)" data-target="summary-page" class="nav-link text-blue-700 hover:text-blue-900">Summary of Bills</a>
+            </nav>
+        </header>
+
+        <!-- Home Page Content -->
+        <div id="home-page" class="page-content">
+            <!-- Introduction Section -->
+            <section class="bg-white p-6 rounded-xl shadow-sm mb-8 border border-gray-100"> <!-- Reduced padding, rounded less, smaller margin -->
+                <h2 class="text-xl font-semibold text-center mb-4 text-gray-700">Welcome to Your Official Payment Portal!</h2> <!-- Smaller font, less margin -->
+                <p class="text-base text-center text-gray-600 leading-relaxed max-w-2xl mx-auto"> <!-- Smaller font, narrower max-width -->
+                    Manage and settle your government service fees, taxes, and business payments for Subic Bay Metropolitan Authority with unparalleled ease and transparency.
+                </p>
+            </section>
+
+            <!-- Outstanding Bills Section -->
+            <section class="mb-8"> <!-- Smaller margin -->
+                <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Your Outstanding Bills at a Glance</h2> <!-- Smaller font, less margin -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> <!-- Reduced gap -->
+
+                    <!-- Bill Card 1: Real Property Tax -->
+                    <div class="bill-card">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-700 mb-1.5">Real Property Tax</h3> <!-- Smaller font, less margin -->
+                            <p class="text-sm text-gray-600 mb-0.5"><span class="font-semibold">Billing Period:</span> CY 2025</p> <!-- Smaller font -->
+                            <p class="text-sm text-gray-600 mb-0.5"><span class="font-semibold">Property Address:</span> Lot 123, Block 45, Subic Townhomes</p>
+                            <p class="text-sm text-gray-600 mb-2"><span class="font-semibold">Account No.:</span> RPT-123456789</p> <!-- Smaller margin -->
+                            <p class="text-2xl font-extrabold text-red-600 mb-4">PHP 15,500.<small class="text-lg">00</small></p> <!-- Smaller font, less margin -->
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-4 font-medium">Due Date: July 31, 2025</p> <!-- Smaller font, less margin -->
+                            <div class="flex flex-col sm:flex-row gap-2 mt-auto"> <!-- Reduced gap -->
+                                <button class="btn-primary w-full sm:w-auto">Pay Online</button>
+                                <a href="javascript:void(0)" class="btn-secondary text-center w-full sm:w-auto flex items-center justify-center">Offline Options</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bill Card 2: Business Permit Renewal Fee -->
+                    <div class="bill-card">
+                        <div>
+                            <h3 class="text-xl font-bold text-green-700 mb-1.5">Business Permit Renewal Fee</h3>
+                            <p class="text-sm text-gray-600 mb-0.5"><span class="font-semibold">Business Name:</span> Subic Tech Solutions Inc.</p>
+                            <p class="text-sm text-gray-600 mb-0.5"><span class="font-semibold">Permit No.:</span> BP-987654321</p>
+                            <p class="text-sm text-gray-600 mb-2"><span class="font-semibold">Type:</span> IT Services</p>
+                            <p class="text-2xl font-extrabold text-red-600 mb-4">PHP 8,250.<small class="text-lg">00</small></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-4 font-medium">Due Date: August 15, 2025</p>
+                            <div class="flex flex-col sm:flex-row gap-2 mt-auto">
+                                <button class="btn-primary w-full sm:w-auto">Pay Online</button>
+                                <a href="javascript:void(0)" class="btn-secondary text-center w-full sm:w-auto flex items-center justify-center">Offline Options</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder for no other bills -->
+                    <div class="bill-card bg-gray-50 border-dashed border-2 border-gray-200 flex items-center justify-center p-6 text-gray-500 text-center col-span-1 md:col-span-2"> <!-- Reduced padding -->
+                        <p class="text-lg font-semibold">No other outstanding bills at this time. Thank you!</p> <!-- Smaller font -->
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Online Payment Options Section -->
+            <section id="payment-options" class="mb-8 p-6 bg-white rounded-xl shadow-sm border border-gray-100"> <!-- Reduced padding, rounded less, smaller margin -->
+                <h2 class="text-2xl font-bold text-center mb-5 text-gray-800">Seamless Online Payments</h2> <!-- Smaller font, less margin -->
+                <p class="text-base text-center text-gray-600 mb-5 max-w-2xl mx-auto"> <!-- Smaller font, narrower max-width, less margin -->
+                    Upon clicking "Pay Online," you will be securely redirected to our payment gateway, powered by <span class="font-semibold">DBP</span>, offering diverse payment methods:
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 md:gap-6"> <!-- Reduced gap -->
+                    <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm text-center min-w-[160px]"> <!-- Reduced padding, rounded less, smaller min-width -->
+                        <p class="font-semibold text-gray-700 text-sm">Direct Debit from <br><span class="font-semibold">DBP</span> Account</p> <!-- Smaller font -->
+                    </div>
+                    <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm text-center min-w-[160px]">
+                        <p class="font-semibold text-gray-700 text-sm">Leading e-Wallets <br>(GCash, PayMaya, etc.)</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm text-center min-w-[160px]">
+                        <p class="font-semibold text-gray-700 text-sm">Major Credit / Debit Cards <br>(Visa, Mastercard)</p>
+                    </div>
+                </div>
+                <p class="text-center text-xs text-gray-500 mt-6"> <!-- Smaller margin -->
+                    *Note: This is a conceptual demonstration. Actual payment processing is secured with bank-grade encryption.
+                </p>
+            </section>
+
+            <!-- Offline Payment Options Section -->
+            <section id="offline-payment" class="mb-8 p-6 bg-white rounded-xl shadow-sm border border-gray-100"> <!-- Reduced padding, rounded less, smaller margin -->
+                <h2 class="text-2xl font-bold text-center mb-5 text-gray-800">Convenient Offline Payment Choices</h2> <!-- Smaller font, less margin -->
+                <p class="text-base text-center text-gray-600 mb-5 max-w-2xl mx-auto"> <!-- Smaller font, narrower max-width, less margin -->
+                    For those who prefer traditional methods, you can settle your payments through:
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 text-sm pl-4"> <!-- Reduced spacing, smaller font, less padding -->
+                    <li><span class="font-extrabold text-blue-700">Over-the-Counter Deposits:</span> Present your bill statement/reference number at any branch of <span class="font-semibold">DBP</span> nationwide.</li>
+                    <li><span class="font-extrabold text-blue-700">Accredited Payment Centers:</span> Utilize our network of authorized payment partners such as Bayad Center, SM Bills Payment, and others. A complete list is available on the official SBMA website.</li>
+                    <li><span class="font-extrabold text-blue-700">Bank Transfer:</span> Directly deposit to SBMA's official account at <span class="font-semibold">DBP</span>. Account details will be clearly indicated on your bill statement.</li>
+                </ul>
+                <p class="text-center text-xs text-gray-500 mt-6"> <!-- Smaller margin -->
+                    Always retain your official payment receipt for seamless reconciliation.
+                </p>
+            </section>
+        </div>
+
+        <!-- Summary of Bills Page Content -->
+        <div id="summary-page" class="page-content hidden">
+            <!-- Summary Introduction Section -->
+            <section class="bg-white p-6 rounded-xl shadow-sm mb-8 border border-gray-100"> <!-- Reduced padding, rounded less, smaller margin -->
+                <h2 class="text-xl font-semibold text-center mb-4 text-gray-700">All Your Bills in One Place</h2> <!-- Smaller font, less margin -->
+                <p class="text-base text-center text-gray-600 leading-relaxed max-w-2xl mx-auto"> <!-- Smaller font, narrower max-width -->
+                    Review your outstanding and recently paid government bills. Select bills to pay or view details.
+                </p>
+            </section>
+
+            <!-- Bills Table Section -->
+            <section class="mb-8 p-6 bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto"> <!-- Reduced padding, rounded less, smaller margin -->
+                <table class="bill-table">
+                    <thead>
+                        <tr>
+                            <th>Service/Bill Type</th>
+                            <th>Account No.</th>
+                            <th>Billing Period</th>
+                            <th>Due Date</th>
+                            <th>Amount Due</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                            <th>e-Receipt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Bill 1: Real Property Tax -->
+                        <tr>
+                            <td class="text-sm font-medium text-blue-700">Real Property Tax</td> <!-- Smaller font -->
+                            <td class="text-xs text-gray-700">RPT-123456789</td> <!-- Smaller font -->
+                            <td class="text-xs text-gray-700">CY 2025</td>
+                            <td class="text-xs text-red-600 font-semibold">July 31, 2025</td>
+                            <td class="text-sm font-bold text-red-600">PHP 15,500.00</td>
+                            <td><span class="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Unpaid</span></td> <!-- Smaller padding/font -->
+                            <td>
+                                <button class="btn-primary">Pay</button>
+                                <button class="btn-explain-bill" data-bill-type="Real Property Tax" data-bill-period="CY 2025">Explain Bill ✨</button>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <!-- Bill 2: Business Permit Renewal Fee -->
+                        <tr>
+                            <td class="text-sm font-medium text-green-700">Business Permit Renewal Fee</td>
+                            <td class="text-xs text-gray-700">BP-987654321</td>
+                            <td class="text-xs text-gray-700">2025</td>
+                            <td class="text-xs text-red-600 font-semibold">August 15, 2025</td>
+                            <td class="text-sm font-bold text-red-600">PHP 8,250.00</td>
+                            <td><span class="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Unpaid</span></td>
+                            <td>
+                                <button class="btn-primary">Pay</button>
+                                <button class="btn-explain-bill" data-bill-type="Business Permit Renewal Fee" data-bill-period="2025">Explain Bill ✨</button>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <!-- Bill 3: Community Tax Certificate -->
+                        <tr>
+                            <td class="text-sm font-medium text-purple-700">Community Tax Cert.</td>
+                            <td class="text-xs text-gray-700">CTC-555444</td>
+                            <td class="text-xs text-gray-700">CY 2025</td>
+                            <td class="text-sm font-bold text-gray-800">PHP 200.00</td>
+                            <td><span class="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Unpaid</span></td>
+                            <td>
+                                <button class="btn-primary">Pay</button>
+                                <button class="btn-explain-bill" data-bill-type="Community Tax Certificate" data-bill-period="CY 2025">Explain Bill ✨</button>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <!-- Bill 4: Environmental Fee (Paid Example) -->
+                        <tr>
+                            <td class="text-sm font-medium text-gray-700">Environmental Fee</td>
+                            <td class="text-xs text-gray-700">ENV-112233</td>
+                            <td class="text-xs text-gray-700">Q1 2025</td>
+                            <td class="text-xs text-gray-500 font-semibold">March 31, 2025</td>
+                            <td class="text-sm font-bold text-gray-800">PHP 500.00</td>
+                            <td><span class="px-2 py-0.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Paid</span></td>
+                            <td>
+                                <button class="btn-secondary" disabled>Paid</button>
+                                <button class="btn-explain-bill" data-bill-type="Environmental Fee" data-bill-period="Q1 2025">Explain Bill ✨</button>
+                            </td>
+                            <td><button class="btn-view-receipt">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="mt-6 text-right"> <!-- Reduced margin -->
+                    <p class="text-lg font-bold text-gray-800">Total Outstanding Amount: <span class="text-red-700">PHP 23,950.00</span></p> <!-- Smaller font -->
+                    <button class="btn-primary text-base mt-4">Proceed to Pay All Outstanding</button> <!-- Smaller font, less margin -->
+                    <p class="text-xs text-gray-500 mt-1.5">Clicking "Pay All" will initiate a combined payment for all unpaid bills.</p> <!-- Smaller font -->
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <!-- Footer Section - Common for both pages -->
+    <footer class="bg-gray-900 text-gray-300 p-4 text-center rounded-t-xl mt-8"> <!-- Reduced padding, rounded less, smaller margin -->
+        <p class="text-xs">&copy; 2025 Subic Bay Metropolitan Authority. All rights reserved.</p> <!-- Smaller font -->
+    </footer>
+
+    <!-- Bill Explanation Modal -->
+    <div id="bill-explanation-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeBillExplanationModal()">×</button>
+            <h3 class="text-xl font-bold text-gray-800 mb-4" id="modal-bill-title"></h3>
+            <p class="text-gray-700 mb-4" id="modal-bill-explanation"></p>
+            <div id="modal-loading-indicator" class="hidden text-center">
+                <p class="text-blue-500">Generating explanation...</p>
+            </div>
+            <button class="btn-primary mt-4 mx-auto block" onclick="closeBillExplanationModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const homePage = document.getElementById('home-page');
+            const summaryPage = document.getElementById('summary-page');
+            const headerSubtitle = document.getElementById('header-subtitle');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const billExplanationModal = document.getElementById('bill-explanation-modal');
+            const modalBillTitle = document.getElementById('modal-bill-title');
+            const modalBillExplanation = document.getElementById('modal-bill-explanation');
+            const modalLoadingIndicator = document.getElementById('modal-loading-indicator');
+            const explainBillButtons = document.querySelectorAll('.btn-explain-bill');
+
+            // Function to show a specific page and update header subtitle
+            const showPage = (pageId) => {
+                homePage.classList.add('hidden');
+                summaryPage.classList.add('hidden');
+
+                if (pageId === 'home-page') {
+                    homePage.classList.remove('hidden');
+                    headerSubtitle.textContent = 'Electronic Bills Payment System';
+                } else if (pageId === 'summary-page') {
+                    summaryPage.classList.remove('hidden');
+                    headerSubtitle.textContent = 'Summary of Your Bills';
+                }
+            };
+
+            // Event listeners for navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default link behavior
+                    const targetPageId = link.dataset.target;
+                    showPage(targetPageId);
+                });
+            });
+
+            // Handle initial load or direct access via hash if applicable (though for immersives, it starts at default)
+            const initialHash = window.location.hash.replace('#', '');
+            if (initialHash === 'summary-page') {
+                showPage('summary-page');
+            } else {
+                showPage('home-page'); // Default to home page
+            }
+
+            // Function to open the bill explanation modal
+            window.openBillExplanationModal = () => {
+                billExplanationModal.classList.remove('hidden');
+            };
+
+            // Function to close the bill explanation modal
+            window.closeBillExplanationModal = () => {
+                billExplanationModal.classList.add('hidden');
+                modalBillExplanation.textContent = ''; // Clear content
+                modalLoadingIndicator.classList.add('hidden'); // Hide loading
+            };
+
+            // Event listeners for "Explain Bill" buttons
+            explainBillButtons.forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const billType = e.target.dataset.billType;
+                    const billPeriod = e.target.dataset.billPeriod;
+
+                    modalBillTitle.textContent = `Explaining: ${billType} (${billPeriod})`;
+                    modalBillExplanation.textContent = ''; // Clear previous explanation
+                    modalLoadingIndicator.classList.remove('hidden'); // Show loading indicator
+                    openBillExplanationModal();
+
+                    // Call Gemini API
+                    try {
+                        const prompt = `As a helpful public service representative from Subic Bay Metropolitan Authority (SBMA), explain in simple, concise terms what the "${billType}" for the period "${billPeriod}" is, and why someone would need to pay it. Keep the explanation to about 2-3 sentences.`;
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // Canvas will provide this API key in runtime
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const explanationText = result.candidates[0].content.parts[0].text;
+                            modalBillExplanation.textContent = explanationText;
+                        } else {
+                            modalBillExplanation.textContent = 'Could not generate explanation. Please try again later.';
+                            console.error('Gemini API response structure unexpected:', result);
+                        }
+                    } catch (error) {
+                        modalBillExplanation.textContent = 'Failed to fetch explanation due to a network error. Please try again.';
+                        console.error('Error calling Gemini API:', error);
+                    } finally {
+                        modalLoadingIndicator.classList.add('hidden'); // Hide loading indicator
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
