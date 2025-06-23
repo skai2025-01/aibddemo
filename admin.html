@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LGU EBPS Admin Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; /* Very light gray */
+            color: #374151; /* Darker gray text */
+        }
+        /* Sidebar is hidden by default on mobile and appears on md: screens */
+        .sidebar {
+            width: 240px; /* Slightly narrower sidebar */
+            background-color: #ffffff; /* White sidebar */
+            color: #4b5563; /* Slate gray text for sidebar */
+            padding: 1.5rem 1rem; /* Adjusted padding */
+            min-height: calc(100vh - 72px); /* Adjust for header height */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Softer shadow */
+            position: fixed;
+            top: 72px; /* Below the header */
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            border-right: 1px solid #e5e7eb; /* Subtle right border */
+            z-index: 20; /* Ensure it's above content when visible */
+            display: none; /* Hidden by default on mobile */
+        }
+        /* Make sidebar visible on medium screens and up */
+        @media (min-width: 768px) {
+            .sidebar {
+                display: block;
+            }
+        }
+
+        .main-content {
+            margin-left: 0; /* No margin-left on mobile */
+            padding: 1.5rem; /* Reduced padding for mobile */
+            background-color: #f9fafb; /* Consistent background */
+            min-height: calc(100vh - 72px); /* Adjust for header height */
+            width: 100%; /* Full width on mobile */
+        }
+        /* Adjust main content margin on medium screens and up to account for sidebar */
+        @media (min-width: 768px) {
+            .main-content {
+                margin-left: 240px;
+                padding: 2.5rem; /* Restore larger padding on desktop */
+            }
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.6rem 0.8rem; /* Smaller padding for nav items */
+            margin-bottom: 0.4rem; /* Reduced margin */
+            border-radius: 0.4rem; /* Slightly less rounded */
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+            font-weight: 500;
+            font-size: 0.9rem; /* Smaller nav text */
+        }
+        .nav-item:hover {
+            background-color: #eff6ff; /* Light blue hover */
+            color: #2563eb; /* Blue text on hover */
+        }
+        .nav-item.active {
+            background-color: #2563eb; /* Blue-600 */
+            color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtler shadow */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.8rem; /* Slightly less rounded for sharper look */
+            padding: 1.5rem; /* Adjusted padding for cards too */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Much softer shadow */
+            margin-bottom: 1.5rem; /* Consistent spacing */
+            border: 1px solid #f3f4f6; /* Very subtle border */
+        }
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem; /* Reduced margin */
+            font-size: 0.8rem; /* Even smaller table text */
+        }
+        .table-custom th, .table-custom td {
+            padding: 0.6rem 0.8rem; /* Smaller padding */
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb; /* Lighter border */
+        }
+        .table-custom th {
+            background-color: #f3f4f6; /* Lighter gray background for headers */
+            font-weight: 600;
+            color: #4b5563; /* Slate-600 */
+            text-transform: uppercase;
+            font-size: 0.75rem; /* Smaller header text */
+        }
+        .table-custom tbody tr:hover {
+            background-color: #fcfcfd; /* Very subtle hover */
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.5rem 0.8rem; /* Smaller padding */
+            border: 1px solid #d1d5db; /* Lighter border */
+            border-radius: 0.4rem; /* Slightly less rounded */
+            font-size: 0.85rem; /* Smaller font size */
+            margin-bottom: 0.7rem; /* Reduced margin */
+            box-shadow: inset 0 0px 1px rgba(0,0,0,0.04); /* Subtler inner shadow */
+            transition: border-color 0.2s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6; /* Blue-500 */
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); /* Softer focus ring */
+        }
+        .btn-action {
+            padding: 0.4rem 0.8rem; /* Smaller button padding */
+            border-radius: 0.4rem; /* Slightly less rounded */
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            font-size: 0.75rem; /* Smaller button text */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* Softer shadow */
+        }
+        .btn-blue {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .btn-blue:hover {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+        }
+        .btn-green {
+            background-color: #10b981;
+            color: white;
+        }
+        .btn-green:hover {
+            background-color: #059669;
+            transform: translateY(-1px);
+        }
+        .btn-red {
+            background-color: #ef4444;
+            color: white;
+        }
+        .btn-red:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive Header Adjustments */
+        .header-content {
+            display: flex;
+            flex-direction: column; /* Stack on mobile */
+            align-items: center; /* Center items on mobile */
+            text-align: center;
+        }
+        .header-nav {
+            margin-top: 0.75rem; /* Space below title on mobile */
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            justify-center;
+            gap: 0.5rem; /* Small gap between buttons on mobile */
+        }
+
+        @media (min-width: 768px) { /* md breakpoint */
+            .header-content {
+                flex-direction: row; /* Row on desktop */
+                justify-content: space-between; /* Space out elements */
+                text-align: left;
+            }
+            .header-nav {
+                margin-top: 0;
+                gap: 0.75rem; /* Slightly larger gap on desktop */
+            }
+            .header-content h1 {
+                font-size: 1.75rem; /* Adjust font size for desktop header */
+            }
+            .header-content .text-base {
+                font-size: 0.9rem; /* Adjust font size for desktop header subtitle */
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="bg-white text-gray-800 p-3 shadow-md z-10 w-full fixed top-0 left-0 border-b border-gray-200">
+        <div class="header-content h-[72px] md:h-auto flex items-center justify-between px-4"> <!-- Ensure header has height -->
+            <div class="flex flex-col items-center md:items-start">
+                <h1 class="text-2xl font-bold text-blue-700">LGU EBPS Admin Dashboard</h1>
+                <p class="text-base text-gray-600">Welcome, Authorized Personnel!</p>
+            </div>
+            <div class="header-nav flex items-center">
+                <button class="btn-action bg-blue-500 hover:bg-blue-600 text-white">Logout</button>
+            </div>
+        </div>
+        <!-- Mobile Sidebar Toggle - Optional for now -->
+        <!-- <button class="md:hidden fixed top-[72px] left-0 p-2 bg-blue-700 text-white z-30">Menu</button> -->
+    </header>
+
+    <div class="flex flex-grow mt-[72px]"> <!-- Compensate for fixed header height -->
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar md:block">
+            <nav>
+                <ul>
+                    <li><a href="javascript:void(0)" data-target="dashboard-overview" class="nav-item active">Dashboard Overview</a></li>
+                    <li><a href="javascript:void(0)" data-target="manage-bill-types" class="nav-item">Manage Bill Types</a></li>
+                    <li><a href="javascript:void(0)" data-target="search-accounts" class="nav-item">Search Accounts</a></li>
+                    <li><a href="javascript:void(0)" data-target="system-logs" class="nav-item">System Logs (Mock)</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content flex-grow">
+
+            <!-- Dashboard Overview Section -->
+            <section id="dashboard-overview" class="page-section">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">Dashboard Overview</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> <!-- Adjusted gap -->
+                    <div class="card text-center p-4 bg-blue-50">
+                        <p class="text-xs text-blue-700 font-semibold mb-1">Total Outstanding Bills</p>
+                        <p class="text-2xl font-extrabold text-blue-800">1,250</p>
+                    </div>
+                    <div class="card text-center p-4 bg-green-50">
+                        <p class="text-xs text-green-700 font-semibold mb-1">Payments Today</p>
+                        <p class="text-2xl font-extrabold text-green-800">235</p>
+                    </div>
+                    <div class="card text-center p-4 bg-yellow-50">
+                        <p class="text-xs text-yellow-700 font-semibold mb-1">Total Revenue (YTD)</p>
+                        <p class="text-xl font-extrabold text-yellow-800">PHP 12.5M</p>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Recent Activities</h3>
+                    <ul class="list-disc list-inside text-gray-600 text-xs space-y-1">
+                        <li>Payment received for RPT-123456789 (PHP 15,500.00) - 2025-06-23 10:30 AM</li>
+                        <li>New Business Permit type "Food Truck Permit" added - 2025-06-22 09:15 AM</li>
+                        <li>Account search for "Maria S. Dela Cruz" performed - 2025-06-21 03:45 PM</li>
+                        <li>System backup completed successfully - 2025-06-20 02:00 AM</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Manage Bill Types Section -->
+            <section id="manage-bill-types" class="page-section hidden">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">Manage Bill Types</h2>
+
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Add New Bill Type</h3>
+                    <form onsubmit="event.preventDefault(); alert('Bill type added!');">
+                        <div class="mb-2">
+                            <label for="bill-name" class="block text-gray-700 text-xs font-bold mb-1">Bill Name:</label>
+                            <input type="text" id="bill-name" class="form-input" placeholder="e.g., Real Property Tax" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="bill-description" class="block text-gray-700 text-xs font-bold mb-1">Description:</label>
+                            <textarea id="bill-description" class="form-input h-16" placeholder="Brief description of the bill type" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="default-amount" class="block text-gray-700 text-xs font-bold mb-1">Default Amount (Optional):</label>
+                            <input type="number" id="default-amount" class="form-input" placeholder="e.g., 1000.00">
+                        </div>
+                        <button type="submit" class="btn-action btn-blue">Add Bill Type</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Existing Bill Types</h3>
+                    <p class="text-gray-600 text-xs mb-2">Below is a summary of all bill types currently defined in the system.</p>
+                    <div class="overflow-x-auto">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Bill Name</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Real Property Tax</td>
+                                    <td>Annual tax on real estate properties.</td>
+                                    <td>
+                                        <button class="btn-action btn-green mr-1">Edit</button>
+                                        <button class="btn-action btn-red">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Business Permit Renewal Fee</td>
+                                    <td>Annual fee for renewing business permits.</td>
+                                    <td>
+                                        <button class="btn-action btn-green mr-1">Edit</button>
+                                        <button class="btn-action btn-red">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Community Tax Certificate</td>
+                                    <td>Basic community tax for individuals and corporations.</td>
+                                    <td>
+                                        <button class="btn-action btn-green mr-1">Edit</button>
+                                        <button class="btn-action btn-red">Delete</button>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>Environmental Fee</td>
+                                    <td>Fee for environmental programs and services.</td>
+                                    <td>
+                                        <button class="btn-action btn-green mr-1">Edit</button>
+                                        <button class="btn-action btn-red">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Accounts Section -->
+            <section id="search-accounts" class="page-section hidden">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">Search Citizen Accounts</h2>
+
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Find Account</h3>
+                    <div class="flex flex-col sm:flex-row gap-2 mb-4"> <!-- Adjusted gap -->
+                        <input type="text" id="account-search-input" class="form-input flex-grow" placeholder="Enter Account No., Name, or Address">
+                        <button class="btn-action btn-blue" onclick="searchAccount()">Search Account</button>
+                    </div>
+
+                    <div id="search-results" class="hidden">
+                        <h4 class="text-base font-semibold mb-2 text-gray-700">Search Results:</h4>
+                        <div class="table-custom rounded-lg overflow-hidden overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Account Name</th>
+                                        <th>Account No.</th>
+                                        <th>Address</th>
+                                        <th>Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Mock search results populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-gray-500 text-xs mt-2" id="no-results-msg" style="display: none;">No accounts found for your query.</p>
+                    </div>
+                </div>
+
+                <!-- Account Details Section (hidden by default) -->
+                <div id="account-details" class="card hidden">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Account Details: <span id="account-detail-name" class="text-blue-700"></span></h3>
+                    <p class="text-gray-700 text-xs mb-1"><span class="font-semibold">Account No.:</span> <span id="account-detail-no"></span></p>
+                    <p class="text-gray-700 text-xs mb-1"><span class="font-semibold">Address:</span> <span id="account-detail-address"></span></p>
+                    <p class="text-gray-700 text-xs mb-2"><span class="font-semibold">Account Type:</span> <span id="account-detail-type"></span></p>
+
+                    <h4 class="text-base font-semibold mb-2 text-gray-700">Payment History</h4>
+                    <div class="overflow-x-auto mb-4">
+                        <table class="table-custom min-w-full">
+                            <thead>
+                                <tr>
+                                    <th>Bill Type</th>
+                                    <th>Period</th>
+                                    <th>Amount</th>
+                                    <th>Date Paid</th>
+                                    <th>Status</th>
+                                    <th>Receipt ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Mock payment history populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4 class="text-base font-semibold mb-2 text-gray-700">Outstanding Balances</h4>
+                    <div class="overflow-x-auto mb-3">
+                        <table class="table-custom min-w-full">
+                            <thead>
+                                <tr>
+                                    <th>Bill Type</th>
+                                    <th>Period</th>
+                                    <th>Amount Due</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Mock outstanding balances populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-base font-bold text-gray-800 text-right">Total Outstanding Balance: <span class="text-red-700" id="total-outstanding-balance"></span></p>
+                </div>
+            </section>
+
+            <!-- System Logs Section (Mock) -->
+            <section id="system-logs" class="page-section hidden">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">System Logs</h2>
+                <div class="card">
+                    <p class="text-gray-600 text-xs">This section would display system activity logs, audit trails, and errors for monitoring purposes.</p>
+                    <ul class="list-disc list-inside text-gray-600 text-xs space-y-1 mt-3">
+                        <li>[2025-06-23 10:30:15] User 'admin01' logged in.</li>
+                        <li>[2025-06-23 10:30:22] Billing type 'Environmental Fee' updated by 'admin02'.</li>
+                        <li>[2025-06-23 10:31:01] Account 'ACCT-987654' details viewed by 'admin01'.</li>
+                        <li>[2025-06-23 10:32:40] Payment gateway API response success for transaction ID: TXN-54321.</li>
+                        <li>[2025-06-23 10:33:05] New user 'accounting_staff' added.</li>
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer - Common for admin dashboard -->
+    <footer class="bg-gray-800 text-gray-300 p-3 text-center border-t border-gray-700">
+        <p class="text-xs">&copy; 2025 Subic Bay Metropolitan Authority - LGU Admin. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('.sidebar .nav-item');
+            const pageSections = document.querySelectorAll('.page-section');
+            const searchResultsDiv = document.getElementById('search-results');
+            const accountDetailsDiv = document.getElementById('account-details');
+            const accountSearchInput = document.getElementById('account-search-input');
+            const noResultsMsg = document.getElementById('no-results-msg');
+            const searchResultsTbody = document.querySelector('#search-results tbody');
+            const accountPaymentHistoryTbody = document.querySelector('#account-details .table-custom tbody:nth-of-type(1)');
+            const accountOutstandingBalancesTbody = document.querySelector('#account-details .table-custom tbody:nth-of-type(2)');
+            const totalOutstandingBalanceSpan = document.getElementById('total-outstanding-balance');
+
+
+            // Function to show a specific section and update active nav item
+            const showSection = (targetId) => {
+                pageSections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+                document.getElementById(targetId).classList.remove('hidden');
+
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+
+                // Hide search results and account details when switching sections
+                searchResultsDiv.classList.add('hidden');
+                accountDetailsDiv.classList.add('hidden');
+            };
+
+            // Event listeners for sidebar navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showSection(item.dataset.target);
+                });
+            });
+
+            // Initial view (show dashboard overview)
+            showSection('dashboard-overview');
+
+            // Mock search account function
+            window.searchAccount = () => {
+                const query = accountSearchInput.value.toLowerCase().trim();
+                let foundResults = false;
+                searchResultsTbody.innerHTML = ''; // Clear previous results
+
+                // Simple mock search logic
+                if (query.includes('juan') || query.includes('987654') || query === 'acct-987654') {
+                    searchResultsTbody.innerHTML = `
+                        <tr class="cursor-pointer hover:bg-gray-50" onclick="displayAccountDetails('Juan Dela Cruz', 'ACCT-987654', '123 Main St, Subic', 'Individual')">
+                            <td>Juan Dela Cruz</td>
+                            <td>ACCT-987654</td>
+                            <td>123 Main St, Subic</td>
+                            <td>Individual</td>
+                            <td><button class="btn-action btn-green text-xs" onclick="event.stopPropagation(); displayAccountDetails('Juan Dela Cruz', 'ACCT-987654', '123 Main St, Subic', 'Individual')">View Details</button></td>
+                        </tr>
+                    `;
+                    foundResults = true;
+                } else if (query.includes('subic builders') || query.includes('112233') || query === 'bus-112233') {
+                    searchResultsTbody.innerHTML = `
+                        <tr class="cursor-pointer hover:bg-gray-50" onclick="displayAccountDetails('Subic Builders Inc.', 'BUS-112233', 'Unit 5, Subic EcoZone', 'Business')">
+                            <td>Subic Builders Inc.</td>
+                            <td>BUS-112233</td>
+                            <td>Unit 5, Subic EcoZone</td>
+                            <td>Business</td>
+                            <td><button class="btn-action btn-green text-xs" onclick="event.stopPropagation(); displayAccountDetails('Subic Builders Inc.', 'BUS-112233', 'Unit 5, Subic EcoZone', 'Business')">View Details</button></td>
+                        </tr>
+                    `;
+                    foundResults = true;
+                }
+
+                if (foundResults) {
+                    searchResultsDiv.classList.remove('hidden');
+                    noResultsMsg.style.display = 'none';
+                } else {
+                    searchResultsDiv.classList.remove('hidden'); // Show the search results area
+                    noResultsMsg.style.display = 'block'; // Display "No accounts found" message
+                }
+                accountDetailsDiv.classList.add('hidden'); // Hide details when new search initiated
+            };
+
+            // Mock display account details function
+            window.displayAccountDetails = (name, accountNo, address, type) => {
+                document.getElementById('account-detail-name').textContent = name;
+                document.getElementById('account-detail-no').textContent = accountNo;
+                document.getElementById('account-detail-address').textContent = address;
+                document.getElementById('account-detail-type').textContent = type;
+
+                // For this mock, we'll show static data based on the selected account
+                if (accountNo === 'ACCT-987654') {
+                     // Example data for Juan Dela Cruz
+                     accountPaymentHistoryTbody.innerHTML = `
+                            <tr>
+                                <td>Real Property Tax</td>
+                                <td>CY 2024</td>
+                                <td>PHP 15,000.00</td>
+                                <td>2024-07-28</td>
+                                <td><span class="px-2 py-0.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Paid</span></td>
+                                <td>REC-00123</td>
+                            </tr>
+                            <tr>
+                                <td>Environmental Fee</td>
+                                <td>Q4 2024</td>
+                                <td>PHP 500.00</td>
+                                <td>2024-12-10</td>
+                                <td><span class="px-2 py-0.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Paid</span></td>
+                                <td>REC-00456</td>
+                            </tr>
+                     `;
+                     accountOutstandingBalancesTbody.innerHTML = `
+                            <tr>
+                                <td>Real Property Tax</td>
+                                <td>CY 2025</td>
+                                <td>PHP 15,500.00</td>
+                                <td>2025-07-31</td>
+                                <td><span class="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Unpaid</span></td>
+                            </tr>
+                            <tr>
+                                <td>Community Tax Certificate</td>
+                                <td>CY 2025</td>
+                                <td>PHP 200.00</td>
+                                <td>2025-09-30</td>
+                                <td><span class="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Unpaid</span></td>
+                            </tr>
+                     `;
+                     totalOutstandingBalanceSpan.textContent = 'PHP 15,700.00'; // Total outstanding for Juan
+                } else if (accountNo === 'BUS-112233') {
+                    // Example data for Subic Builders Inc.
+                    accountPaymentHistoryTbody.innerHTML = `
+                            <tr>
+                                <td>Business Permit Renewal Fee</td>
+                                <td>2024</td>
+                                <td>PHP 8,000.00</td>
+                                <td>2024-08-01</td>
+                                <td><span class="px-2 py-0.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Paid</span></td>
+                                <td>REC-00789</td>
+                            </tr>
+                     `;
+                    accountOutstandingBalancesTbody.innerHTML = `
+                            <tr>
+                                <td>Business Permit Renewal Fee</td>
+                                <td>2025</td>
+                                <td>PHP 8,250.00</td>
+                                <td>2025-08-15</td>
+                                <td><span class="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Unpaid</span></td>
+                            </tr>
+                     `;
+                     totalOutstandingBalanceSpan.textContent = 'PHP 8,250.00'; // Total outstanding for Subic Builders
+                }
+
+                accountDetailsDiv.classList.remove('hidden');
+            };
+        });
+    </script>
+</body>
+</html>
