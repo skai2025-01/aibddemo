@@ -256,12 +256,7 @@
             border-radius: 0; /* Make it straight to the edges */
             box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1); /* Subtle blue shadow */
             margin-bottom: 3rem; /* Space below the hero section */
-            width: 100vw; /* Occupy full viewport width */
-            position: relative; /* For z-index if needed */
-            left: 50%; /* Center it */
-            right: 50%;
-            margin-left: -50vw; /* Pull it back to the left edge */
-            margin-right: -50vw; /* Pull it back to the right edge */
+            /* Removed width: 100vw; and negative margins as it's now outside the main container */
         }
         .hero-section-wrapper .bg-white {
             background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white for content card */
@@ -280,12 +275,7 @@
             border-radius: 0 !important; /* Override rounded-3xl from Tailwind */
             box-shadow: none !important; /* Remove shadow */
             margin-bottom: 0 !important; /* Remove bottom margin */
-            width: 100vw; /* Occupy full viewport width */
-            position: relative;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
+            /* Removed width: 100vw; and negative margins as it's now outside the main container */
             z-index: 20; /* Ensure it's above other content */
             border-bottom: 1px solid #dbeafe; /* Subtle bottom border */
         }
@@ -340,40 +330,40 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
-    <!-- Main Container -->
-    <div class="container p-6 md:p-10 flex-grow max-w-7xl">
-
-        <!-- Header Section - Common for all pages -->
-        <header class="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800 text-center relative
-                       flex flex-col sm:flex-row sm:justify-between sm:items-center sm:text-left">
-            <div class="header-inner-content">
-                <div class="text-center sm:text-left mb-4 sm:mb-0">
-                    <h1 class="text-4xl font-extrabold mb-2 leading-tight">Subic EBPS</h1>
-                    <p class="text-xl font-light" id="header-subtitle">Electronic Bills Payment System</p>
-                </div>
-                <!-- Navigation Links and Login/Logout -->
-                <nav class="flex flex-wrap justify-center sm:justify-end gap-3 items-center">
-                    <a href="javascript:void(0)" data-target="home-page" class="nav-link">Home</a>
-                    <a href="javascript:void(0)" data-target="summary-page" class="nav-link">Summary of Bills</a>
-                    <a href="javascript:void(0)" data-target="account-management-page" class="nav-link" id="account-management-nav-link">Account Management</a>
-                    <span id="auth-status" class="ml-4 text-lg font-semibold text-blue-700"></span>
-                    <button id="auth-button" class="btn-primary ml-4 px-6 py-2 text-base" onclick="toggleAuth()">Login</button>
-                </nav>
+    <!-- Header Section - Common for all pages -->
+    <header class="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800 text-center
+                   flex flex-col sm:flex-row sm:justify-between sm:items-center sm:text-left">
+        <div class="header-inner-content">
+            <div class="text-center sm:text-left mb-4 sm:mb-0">
+                <h1 class="text-4xl font-extrabold mb-2 leading-tight">Subic EBPS</h1>
+                <p class="text-xl font-light" id="header-subtitle">Electronic Bills Payment System</p>
             </div>
-        </header>
+            <!-- Navigation Links and Login/Logout -->
+            <nav class="flex flex-wrap justify-center sm:justify-end gap-3 items-center">
+                <a href="javascript:void(0)" data-target="home-page" class="nav-link">Home</a>
+                <a href="javascript:void(0)" data-target="summary-page" class="nav-link">Summary of Bills</a>
+                <a href="javascript:void(0)" data-target="account-management-page" class="nav-link" id="account-management-nav-link">Account Management</a>
+                <span id="auth-status" class="ml-4 text-lg font-semibold text-blue-700"></span>
+                <button id="auth-button" class="btn-primary ml-4 px-6 py-2 text-base" onclick="toggleAuth()">Login</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Introduction Section - Now wrapped in a hero-section-wrapper, outside the main container -->
+    <div class="hero-section-wrapper">
+        <section class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+            <h2 class="text-3xl font-semibold text-center mb-6 text-gray-700">Welcome to Your Official Payment Portal!</h2>
+            <p class="text-lg text-center text-gray-600 leading-relaxed max-w-4xl mx-auto">
+                Manage and settle your government service fees, taxes, and business payments for Subic Bay Metropolitan Authority with unparalleled ease and transparency.
+            </p>
+        </section>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container mx-auto p-6 md:p-10 flex-grow max-w-7xl">
 
         <!-- Home Page Content -->
         <div id="home-page" class="page-content">
-            <!-- Introduction Section - Now wrapped in a hero-section-wrapper -->
-            <div class="hero-section-wrapper">
-                <section class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                    <h2 class="text-3xl font-semibold text-center mb-6 text-gray-700">Welcome to Your Official Payment Portal!</h2>
-                    <p class="text-lg text-center text-gray-600 leading-relaxed max-w-4xl mx-auto">
-                        Manage and settle your government service fees, taxes, and business payments for Subic Bay Metropolitan Authority with unparalleled ease and transparency.
-                    </p>
-                </section>
-            </div>
-
             <!-- Outstanding Bills Section - Now with ID for JS control -->
             <section id="outstanding-bills-section" class="mb-12">
                 <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Your Outstanding Bills at a Glance</h2>
@@ -818,3 +808,4 @@
     </script>
 </body>
 </html>
+
