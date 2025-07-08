@@ -243,7 +243,7 @@
                 <h3 class="text-xl font-semibold text-blue-800 mb-4">Login</h3>
                 <div class="input-group mb-4">
                     <label for="loginCustomerId">Customer ID</label>
-                    <input type="text" id="loginCustomerId" placeholder="e.g., CUST001" class="focus:border-blue-500 focus:ring-blue-200">
+                    <input type="text" id="loginCustomerId" placeholder="e.g., DEMOUSER1" class="focus:border-blue-500 focus:ring-blue-200">
                 </div>
                 <div class="input-group mb-4">
                     <label for="loginPassword">Password</label>
@@ -545,15 +545,15 @@
         // --- Simulated User Data and Payments ---
         let currentUser = null;
         const registeredCustomers = {
-            "CUST001": { company_name: "Subic Logistics Inc.", customer_type: "Freight Forwarder", password: "pass123" },
-            "CUST002": { company_name: "Global Shipping Co.", customer_type: "Vessel Agent", password: "secure456" },
-            "CUST003": { company_name: "Philippine Imports Ltd.", customer_type: "Cargo Owner", password: "cargo789" }
+            "DEMOUSER1": { company_name: "Demo Logistics Corp.", customer_type: "Freight Forwarder", password: "demo123" },
+            "TESTAGENT": { company_name: "Test Vessel Agency", customer_type: "Vessel Agent", password: "testpass" },
+            "CARGOHUB": { company_name: "Cargo Hub Solutions", customer_type: "Cargo Owner", password: "hubcargo" }
         };
         const allPayments = [
             // Sample historical data
-            { customer_id: "CUST001", permit_id: "PERMIT-001", amount: 15000.00, date: "2024-06-15", status: "Completed" },
-            { customer_id: "CUST002", permit_id: "PERMIT-002", amount: 75000.50, date: "2024-06-20", status: "Completed" },
-            { customer_id: "CUST001", permit_id: "PERMIT-003", amount: 2200.75, date: "2024-06-25", status: "Completed" }
+            { customer_id: "DEMOUSER1", permit_id: "PERMIT-001", amount: 15000.00, date: "2024-06-15", status: "Completed" },
+            { customer_id: "TESTAGENT", permit_id: "PERMIT-002", amount: 75000.50, date: "2024-06-20", status: "Completed" },
+            { customer_id: "DEMOUSER1", permit_id: "PERMIT-003", amount: 2200.75, date: "2024-06-25", status: "Completed" }
         ];
         let currentPermitId = ''; // To link payments to a unique permit
         let currentPermitDetails = {}; // To store details for the dummy permit
