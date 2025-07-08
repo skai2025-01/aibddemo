@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBMA Operations Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .dashboard-container {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        .card {
+            background-color: #f8fafc; /* bg-gray-50 */
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .card-header {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a202c; /* text-gray-900 */
+            margin-bottom: 1rem;
+        }
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2563eb; /* text-blue-600 */
+        }
+        .metric-label {
+            font-size: 0.875rem;
+            color: #4a5568;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px; /* full rounded */
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-approved { background-color: #d1fae5; color: #065f46; } /* bg-green-100, text-green-800 */
+        .status-pending { background-color: #fffbeb; color: #92400e; } /* bg-yellow-100, text-yellow-800 */
+        .status-rejected { background-color: #fee2e2; color: #991b1b; } /* bg-red-100, text-red-800 */
+        .status-paid { background-color: #e0f2fe; color: #1e40af; } /* bg-blue-100, text-blue-800 */
+        .table-header th {
+            padding: 0.75rem 0.5rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .table-row td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
+            color: #2d3748;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .table-row:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <h1 class="text-4xl font-extrabold text-gray-800 mb-4 md:mb-0">
+                SBMA <span class="text-blue-600">eTAPS</span> Operations Dashboard
+            </h1>
+            <div class="text-right text-gray-600">
+                <p class="text-lg font-semibold">Welcome, Operations Team!</p>
+                <p class="text-sm">Last Updated: <span id="lastUpdated"></span></p>
+            </div>
+        </header>
+
+        <!-- Key Metrics Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="card text-center">
+                <p class="metric-label">Permits Approved Today</p>
+                <p class="metric-value text-green-600">125</p>
+            </div>
+            <div class="card text-center">
+                <p class="metric-label">Payments Received Today</p>
+                <p class="metric-value text-blue-600">PHP 1.2M</p>
+            </div>
+            <div class="card text-center">
+                <p class="metric-label">Pending Approvals</p>
+                <p class="metric-value text-yellow-600">18</p>
+            </div>
+        </div>
+
+        <!-- Real-time Tracking & Automated Approvals -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="card">
+                <h2 class="card-header">Real-time Permit & Payment Status</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="table-header">
+                                <th>Permit ID</th>
+                                <th>Customer</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-row">
+                                <td>P-78901</td>
+                                <td>Global Shipping Co.</td>
+                                <td>Berthing</td>
+                                <td><span class="status-badge status-approved">Approved</span></td>
+                                <td><span class="status-badge status-paid">Paid</span></td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>P-78902</td>
+                                <td>Subic Logistics Inc.</td>
+                                <td>Cargo Import</td>
+                                <td><span class="status-badge status-pending">Pending Approval</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>P-78903</td>
+                                <td>Philippine Imports Ltd.</td>
+                                <td>Cargo Export</td>
+                                <td><span class="status-badge status-approved">Approved</span></td>
+                                <td><span class="status-badge status-paid">Paid</span></td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>P-78904</td>
+                                <td>Vessel Ops PH</td>
+                                <td>Line Handling</td>
+                                <td><span class="status-badge status-approved">Approved</span></td>
+                                <td><span class="status-badge status-paid">Paid</span></td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>P-78905</td>
+                                <td>Asia Freight Solutions</td>
+                                <td>Cargo Transship</td>
+                                <td><span class="status-badge status-pending">Pending Approval</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-header">Automated Approval Queue</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="table-header">
+                                <th>Permit ID</th>
+                                <th>Customer</th>
+                                <th>Criteria Met</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-row">
+                                <td>A-00123</td>
+                                <td>Ocean Carriers</td>
+                                <td>All (Auto)</td>
+                                <td><button class="btn btn-secondary py-1 px-3 text-xs">Approve</button></td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>A-00124</td>
+                                <td>Island Trade Co.</td>
+                                <td>Missing Doc (Manual)</td>
+                                <td><button class="btn btn-primary py-1 px-3 text-xs">Review</button></td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>A-00125</td>
+                                <td>Coastal Shipping</td>
+                                <td>All (Auto)</td>
+                                <td><button class="btn btn-secondary py-1 px-3 text-xs">Approve</button></td>
+                            </tr>
+                            <tr class="table-row">
+                                <td>A-00126</td>
+                                <td>Port Services PH</td>
+                                <td>Payment Pending (Auto)</td>
+                                <td><button class="btn btn-primary py-1 px-3 text-xs">Wait</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Reporting Section -->
+        <div class="card">
+            <h2 class="card-header">Advanced Reporting Capabilities</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h3 class="font-semibold text-gray-700 mb-2">Revenue by Fee Type</h3>
+                    <p class="text-sm text-gray-600">Detailed breakdown of income sources.</p>
+                    <button class="btn btn-primary py-1 px-3 text-xs mt-3">Generate Report</button>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h3 class="font-semibold text-gray-700 mb-2">Permit Processing Times</h3>
+                    <p class="text-sm text-gray-600">Analyze efficiency and bottlenecks.</p>
+                    <button class="btn btn-primary py-1 px-3 text-xs mt-3">Generate Report</button>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h3 class="font-semibold text-gray-700 mb-2">Customer Payment Trends</h3>
+                    <p class="text-sm text-gray-600">Identify peak periods and customer behavior.</p>
+                    <button class="btn btn-primary py-1 px-3 text-xs mt-3">Generate Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('lastUpdated').innerText = new Date().toLocaleString();
+    </script>
+</body>
+</html>
