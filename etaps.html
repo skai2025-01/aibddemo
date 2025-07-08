@@ -96,7 +96,7 @@
             transform: translateY(-1px);
         }
         .fee-table th, .fee-table td {
-            padding: 0.625rem 0.75rem; /* py-2.5 px-3, slightly reduced */
+            padding: 0.5rem 0.75rem; /* py-2 px-3, slightly reduced */
             text-align: left;
         }
         .fee-table th {
@@ -183,19 +183,45 @@
             margin-left: auto;
             margin-right: auto;
         }
+        .permit-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        .permit-detail-row:last-child {
+            border-bottom: none;
+        }
+        .permit-detail-label {
+            font-weight: 500;
+            color: #4a5568;
+        }
+        .permit-detail-value {
+            color: #2d3748;
+            text-align: right;
+        }
+        .permit-status-approved {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Navigation Bar -->
-        <div id="navbar" class="flex justify-between items-center mb-6 hidden">
+        <div id="navbar" class="flex justify-between items-center mb-4 hidden"> <!-- Reduced mb-6 to mb-4 -->
             <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800">
                 <span class="text-blue-600">eTAPS Pay</span>
             </h1>
             <div class="flex gap-2">
                 <button onclick="showSection('mainApp')" class="btn btn-tertiary text-sm md:text-base">
                     <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 00-1-1H7a1 1 0 00-1 1v2h-.586l.293.293A1 1 0 006 18h8a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                    Calculate Fees
+                    Apply & Pay
                 </button>
                 <button onclick="openAccountModal()" class="btn btn-tertiary text-sm md:text-base">
                     <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
@@ -216,8 +242,8 @@
             <div class="bg-blue-50 p-6 rounded-xl mb-6 shadow-sm auth-card">
                 <h3 class="text-xl font-semibold text-blue-800 mb-4">Login</h3>
                 <div class="input-group mb-4">
-                    <label for="loginPayorId">Payor ID</label>
-                    <input type="text" id="loginPayorId" placeholder="e.g., PAYOR001" class="focus:border-blue-500 focus:ring-blue-200">
+                    <label for="loginCustomerId">Customer ID</label>
+                    <input type="text" id="loginCustomerId" placeholder="e.g., CUST001" class="focus:border-blue-500 focus:ring-blue-200">
                 </div>
                 <div class="input-group mb-4">
                     <label for="loginPassword">Password</label>
@@ -230,10 +256,10 @@
             </div>
 
             <div class="bg-gray-100 p-6 rounded-xl shadow-sm auth-card">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4">Register New Payor</h3>
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Register New Customer</h3>
                 <div class="input-group mb-4">
-                    <label for="registerPayorId">New Payor ID</label>
-                    <input type="text" id="registerPayorId" placeholder="Choose a unique ID (e.g., MYCO001)" class="focus:border-blue-500 focus:ring-blue-200">
+                    <label for="registerCustomerId">New Customer ID</label>
+                    <input type="text" id="registerCustomerId" placeholder="Choose a unique ID (e.g., MYCO001)" class="focus:border-blue-500 focus:ring-blue-200">
                 </div>
                 <div class="input-group mb-4">
                     <label for="registerCompanyName">Company Name</label>
@@ -244,8 +270,8 @@
                     <input type="password" id="registerPassword" placeholder="Set your password" class="focus:border-blue-500 focus:ring-blue-200">
                 </div>
                 <div class="input-group mb-4">
-                    <label for="registerPayorType">Payor Type</label>
-                    <select id="registerPayorType" class="focus:border-blue-500 focus:ring-blue-200">
+                    <label for="registerCustomerType">Customer Type</label>
+                    <select id="registerCustomerType" class="focus:border-blue-500 focus:ring-blue-200">
                         <option value="">Select Type</option>
                         <option value="Vessel Agent">Vessel Agent</option>
                         <option value="Cargo Owner">Cargo Owner</option>
@@ -263,75 +289,83 @@
 
         <!-- Main Application Section -->
         <div id="mainAppSection" class="hidden w-full">
-            <p class="text-center text-gray-600 mb-8 text-sm md:text-base">
-                Securely calculate and pay your Subic Bay Metropolitan Authority (SBMA) seaport fees.
+            <p class="text-center text-gray-600 mb-6 text-sm md:text-base">
+                Welcome to the eTAPS Pay Portal! Here you can easily apply for permits, calculate your fees, and make secure payments. Follow the steps below to get started.
             </p>
 
-            <!-- Fee Calculation Section -->
-            <div class="bg-blue-50 p-5 rounded-xl mb-6 shadow-sm">
-                <h2 class="text-xl md:text-2xl font-bold text-blue-800 mb-5">1. Calculate Your Fees</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                    <div class="input-group">
-                        <label for="vesselType">Vessel Type</label>
-                        <select id="vesselType" class="focus:border-blue-500 focus:ring-blue-200">
-                            <option value="International Foreign">International Foreign Vessel</option>
-                            <option value="Domestic Coastal">Domestic/Coastal Vessel</option>
+            <!-- Permit Application & Fee Calculation Section -->
+            <div id="permitApplicationSection" class="bg-blue-50 p-4 rounded-xl mb-4 shadow-sm">
+                <h2 class="text-xl md:text-2xl font-bold text-blue-800 mb-4">1. Permit Application & Fee Calculation</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="input-group mb-3">
+                        <label for="permitType">Permit Type</label>
+                        <select id="permitType" class="focus:border-blue-500 focus:ring-blue-200">
+                            <option value="Vessel Entry">Vessel Entry</option>
+                            <option value="Cargo Import">Cargo Import</option>
+                            <option value="Cargo Export">Cargo Export</option>
+                            <option value="Cargo Transshipment">Cargo Transshipment</option>
+                            <option value="Tug Service">Tug Service</option>
                         </select>
                     </div>
-                    <div class="input-group">
+                    <div class="input-group mb-3">
+                        <label for="vesselName">Vessel Name (if applicable)</label>
+                        <input type="text" id="vesselName" placeholder="e.g., MV Sea Breeze" class="focus:border-blue-500 focus:ring-blue-200">
+                    </div>
+                    <div class="input-group mb-3">
                         <label for="grt">Gross Registered Tonnage (GRT)</label>
                         <input type="number" id="grt" value="10000" min="1" placeholder="e.g., 10000" class="focus:border-blue-500 focus:ring-blue-200">
                     </div>
-                    <div class="input-group">
+                    <div class="input-group mb-3">
                         <label for="days">Days at Port (Berthing/Harbor Cleaning)</label>
                         <input type="number" id="days" value="3" min="1" placeholder="e.g., 3" class="focus:border-blue-500 focus:ring-blue-200">
                     </div>
-                    <div class="input-group">
+                    <div class="input-group mb-3">
                         <label for="lineMoves">Line Handling Moves</label>
                         <input type="number" id="lineMoves" value="2" min="0" placeholder="e.g., 2" class="focus:border-blue-500 focus:ring-blue-200">
                     </div>
                 </div>
-                <div class="bg-gray-100 p-5 rounded-lg mb-5">
-                    <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-4">Cargo Details (Foreign Import 20ft FCL)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div class="input-group">
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-3">Cargo Details (Foreign Import 20ft FCL Example)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="input-group mb-3">
                             <label for="containerCount">Number of 20ft Containers</label>
                             <input type="number" id="containerCount" value="5" min="0" placeholder="e.g., 5" class="focus:border-blue-500 focus:ring-blue-200">
                         </div>
-                        <div class="input-group">
+                        <div class="input-group mb-3">
                             <label for="cargoStorageDays">Cargo Storage Days</label>
                             <input type="number" id="cargoStorageDays" value="7" min="0" placeholder="e.g., 7" class="focus:border-blue-500 focus:ring-blue-200">
                         </div>
                     </div>
                 </div>
-                <button onclick="calculateFees()" class="btn btn-primary w-full md:w-auto">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    Calculate Fees
+                <button onclick="submitPermitApplication()" class="btn btn-primary w-full md:w-auto">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg>
+                    Submit Permit Application
                 </button>
+                <div id="applicationMessage" class="message-box hidden mt-4"></div>
             </div>
 
             <!-- Fee Summary Section -->
-            <div class="bg-white p-5 rounded-xl mb-6 shadow-sm">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-5">2. Fee Summary</h2>
+            <div id="feeSummarySection" class="bg-white p-4 rounded-xl mb-4 shadow-sm">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">2. Fee Summary</h2>
                 <div id="feeSummary" class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden fee-table">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee Type</th>
-                                <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                                <th class="px-3 py-2.5 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount (PHP)</th>
+                                <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee Type</th>
+                                <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                <th class="px-2 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount (PHP)</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100" id="feeDetailsBody">
                             <!-- Fee details will be inserted here by JavaScript -->
                             <tr>
-                                <td colspan="3" class="text-center py-6 text-gray-500">Enter details and click "Calculate Fees" to see the summary.</td>
+                                <td colspan="3" class="text-center py-6 text-gray-500">Submit a permit application to see the fee summary.</td>
                             </tr>
                         </tbody>
                         <tfoot id="feeTotalFooter" class="hidden">
                             <tr class="total-row">
-                                <td colspan="2" class="px-3 py-2.5 text-right text-base font-bold">Total Amount Due:</td>
-                                <td class="px-3 py-2.5 text-right text-lg font-extrabold text-blue-700" id="totalAmount">PHP 0.00</td>
+                                <td colspan="2" class="px-2 py-2 text-right text-base font-bold">Total Amount Due:</td>
+                                <td class="px-2 py-2 text-right text-lg font-extrabold text-blue-700" id="totalAmount">PHP 0.00</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -339,9 +373,9 @@
             </div>
 
             <!-- Payment Section -->
-            <div class="bg-white p-5 rounded-xl shadow-sm">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-5">3. Choose Payment Method</h2>
-                <div class="flex flex-col md:flex-row gap-4 mb-5">
+            <div id="paymentSection" class="bg-white p-4 rounded-xl shadow-sm">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">3. Choose Payment Method</h2>
+                <div class="flex flex-col md:flex-row gap-3 mb-4">
                     <button onclick="initiatePayment('Credit/Debit Card')" class="btn btn-secondary flex-1 payment-button">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"></path></svg>
                         Credit/Debit Card
@@ -356,9 +390,27 @@
                     </button>
                 </div>
                 <div id="paymentMessage" class="message-box hidden"></div>
-                <button id="newCalculationBtn" onclick="resetForm()" class="btn btn-tertiary w-full mt-4 hidden">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.162a8.01 8.01 0 019.262 6.845 1 1 0 01-1.748.723A6.01 6.01 0 005 6.414V8a1 1 0 01-2 0V3a1 1 0 011-1zm12 16a1 1 0 01-1-1v-2.162a8.01 8.01 0 01-9.262-6.845 1 1 0 011.748-.723A6.01 6.01 0 0015 13.586V12a1 1 0 012 0v5a1 1 0 01-1 1z" clip-rule="evenodd"></path></svg>
-                    New Calculation
+            </div>
+        </div>
+
+        <!-- Permit Completion Section (New) -->
+        <div id="permitCompletionSection" class="hidden w-full text-center">
+            <div class="bg-green-50 p-6 rounded-xl mb-6 shadow-sm">
+                <h2 class="text-3xl font-bold text-green-800 mb-4">Payment Confirmed!</h2>
+                <p class="text-lg text-gray-700 mb-4">Your payment for Permit ID: <span id="completedPermitId" class="font-bold text-blue-600"></span> has been successfully processed.</p>
+                <p class="text-md text-gray-600 mb-8">You can now finalize your permit application with SBMA.</p>
+                <button onclick="completePermitApplication()" class="btn btn-secondary text-lg px-8 py-4 mb-4">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    Complete Permit Application
+                </button>
+                <p class="text-gray-500 text-sm">This action will send final confirmation to SBMA's eTAPS.</p>
+                <button id="viewPermitBtn" onclick="openPermitViewModal()" class="btn btn-primary w-full mt-6 hidden">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                    View Your Permit
+                </button>
+                <button onclick="resetForm()" class="btn btn-tertiary w-full mt-3">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.162a8.01 8.01 0 019.262 6.845 1 1 0 01-1.748.723A6.01 6.01 0 005 6.414V8a1 1 0 01-2 0V3a1 1 0 011-1zm12 16a1 1 0 01-1-1v-2.162a8.01 8.01 0 01-9.262-6.845 1 1 0 011.748-.723A6.01 6.01 0 0015 13.586V12a1 1 0 012 0v5a1 1 0 01-1 1z" clip-rule="evenodd"></path></svg>
+                    Start New Application
                 </button>
             </div>
         </div>
@@ -371,10 +423,10 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-6">My Account</h2>
 
             <div class="bg-blue-50 p-5 rounded-xl mb-6 shadow-sm">
-                <h3 class="text-xl font-semibold text-blue-800 mb-4">Payor Details</h3>
-                <p class="mb-2"><span class="font-semibold">Payor ID:</span> <span id="accountPayorId"></span></p>
+                <h3 class="text-xl font-semibold text-blue-800 mb-4">Customer Details</h3>
+                <p class="mb-2"><span class="font-semibold">Customer ID:</span> <span id="accountCustomerId"></span></p>
                 <p class="mb-2"><span class="font-semibold">Company Name:</span> <span id="accountCompanyName"></span></p>
-                <p><span class="font-semibold">Payor Type:</span> <span id="accountPayorType"></span></p>
+                <p><span class="font-semibold">Customer Type:</span> <span id="accountCustomerType"></span></p>
             </div>
 
             <div class="bg-white p-5 rounded-xl shadow-sm">
@@ -387,11 +439,12 @@
                                 <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                                 <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                                 <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100" id="paymentHistoryBody">
                             <tr>
-                                <td colspan="4" class="text-center py-6 text-gray-500">No payment history found.</td>
+                                <td colspan="5" class="text-center py-6 text-gray-500">No payment history found.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -400,8 +453,67 @@
         </div>
     </div>
 
+    <!-- Permit View Modal (New) -->
+    <div id="permitViewModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" onclick="closePermitViewModal()">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Official Permit</h2>
+
+            <div class="bg-blue-50 p-5 rounded-xl mb-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-blue-800 mb-4">Permit Details</h3>
+                <div class="space-y-2">
+                    <div class="permit-detail-row">
+                        <span class="permit-detail-label">Permit ID:</span>
+                        <span id="permitViewId" class="permit-detail-value font-bold text-blue-700"></span>
+                    </div>
+                    <div class="permit-detail-row">
+                        <span class="permit-detail-label">Customer Name:</span>
+                        <span id="permitViewCustomer" class="permit-detail-value"></span>
+                    </div>
+                    <div class="permit-detail-row">
+                        <span class="permit-detail-label">Permit Type:</span>
+                        <span id="permitViewType" class="permit-detail-value"></span>
+                    </div>
+                    <div class="permit-detail-row">
+                        <span class="permit-detail-label">Vessel Name:</span>
+                        <span id="permitViewVessel" class="permit-detail-value"></span>
+                    </div>
+                    <div class="permit-detail-row">
+                        <span class="permit-detail-label">GRT:</span>
+                        <span id="permitViewGrt" class="permit-detail-value"></span>
+                    </div>
+                    <div class="permit-detail-row">
+                        <span class="permit-detail-label">Days at Port:</span>
+                        <span id="permitViewDays" class="permit-detail-value"></span>
+                    </div>
+                    <div class="permit-detail-row">
+                        <span class="permit-detail-label">Containers:</span>
+                        <span id="permitViewContainers" class="permit-detail-value"></span>
+                    </div>
+                    <div class="permit-detail-row">
+                        <span class="permit-detail-label">Cargo Storage Days:</span>
+                        <span id="permitViewCargoDays" class="permit-detail-value"></span>
+                    </div>
+                    <div class="permit-detail-row">
+                        <span class="permit-detail-label">Validity Period:</span>
+                        <span id="permitViewValidity" class="permit-detail-value"></span>
+                    </div>
+                </div>
+                <div class="text-center mt-6">
+                    <img id="permitQrCode" src="" alt="Permit QR Code" class="mx-auto w-32 h-32 border border-gray-300 rounded-lg p-2">
+                    <p class="text-gray-500 text-sm mt-2">Scan to verify Permit ID</p>
+                </div>
+                <div class="text-center">
+                    <span class="permit-status-approved">STATUS: APPROVED</span>
+                </div>
+            </div>
+            <p class="text-center text-gray-600 text-sm">This is a dummy permit for demonstration purposes. Official permits will be issued by SBMA.</p>
+        </div>
+    </div>
+
+
     <script>
-        // Simplified Tariff Data (PHP values for demonstration, USD converted)
+        // Simulated Tariff Data (PHP values for demonstration, USD converted)
         const EXCHANGE_RATE_USD_PHP = 55.00; // Fixed for demo
 
         const TARIFF = {
@@ -432,18 +544,20 @@
 
         // --- Simulated User Data and Payments ---
         let currentUser = null;
-        const registeredPayors = {
-            "PAYOR001": { company_name: "Subic Logistics Inc.", payor_type: "Freight Forwarder", password: "pass123" },
-            "PAYOR002": { company_name: "Global Shipping Co.", payor_type: "Vessel Agent", password: "secure456" },
-            "PAYOR003": { company_name: "Philippine Imports Ltd.", payor_type: "Cargo Owner", password: "cargo789" }
+        const registeredCustomers = {
+            "CUST001": { company_name: "Subic Logistics Inc.", customer_type: "Freight Forwarder", password: "pass123" },
+            "CUST002": { company_name: "Global Shipping Co.", customer_type: "Vessel Agent", password: "secure456" },
+            "CUST003": { company_name: "Philippine Imports Ltd.", customer_type: "Cargo Owner", password: "cargo789" }
         };
         const allPayments = [
             // Sample historical data
-            { payor_id: "PAYOR001", permit_id: "PERMIT-001", amount: 15000.00, date: "2024-06-15", status: "Completed" },
-            { payor_id: "PAYOR002", permit_id: "PERMIT-002", amount: 75000.50, date: "2024-06-20", status: "Completed" },
-            { payor_id: "PAYOR001", permit_id: "PERMIT-003", amount: 2200.75, date: "2024-06-25", status: "Completed" }
+            { customer_id: "CUST001", permit_id: "PERMIT-001", amount: 15000.00, date: "2024-06-15", status: "Completed" },
+            { customer_id: "CUST002", permit_id: "PERMIT-002", amount: 75000.50, date: "2024-06-20", status: "Completed" },
+            { customer_id: "CUST001", permit_id: "PERMIT-003", amount: 2200.75, date: "2024-06-25", status: "Completed" }
         ];
         let currentPermitId = ''; // To link payments to a unique permit
+        let currentPermitDetails = {}; // To store details for the dummy permit
+        const completedPermits = []; // New array to store all completed permit details
 
         // --- Utility Functions ---
         function usdToPhp(amountUsd) {
@@ -477,6 +591,8 @@
             document.getElementById('mainAppSection').classList.add('hidden');
             document.getElementById('navbar').classList.add('hidden');
             document.getElementById('accountModal').classList.add('hidden'); // Ensure modal is hidden
+            document.getElementById('permitCompletionSection').classList.add('hidden'); // Hide new section
+            document.getElementById('permitViewModal').classList.add('hidden'); // Hide permit view modal
 
             if (sectionId === 'authSection') {
                 document.getElementById('authSection').classList.remove('hidden');
@@ -489,58 +605,61 @@
                     displayMessage('Please login first to access the calculator.', 'error', 'authMessage');
                     document.getElementById('authSection').classList.remove('hidden');
                 }
+            } else if (sectionId === 'permitCompletion') {
+                document.getElementById('permitCompletionSection').classList.remove('hidden');
+                document.getElementById('navbar').classList.remove('hidden'); // Keep navbar visible
             }
         }
 
         // --- Authentication Functions ---
         function login() {
-            const payorId = document.getElementById('loginPayorId').value.trim().toUpperCase();
+            const customerId = document.getElementById('loginCustomerId').value.trim().toUpperCase();
             const password = document.getElementById('loginPassword').value;
 
-            if (!payorId || !password) {
-                displayMessage('Please enter both Payor ID and Password.', 'error', 'authMessage');
+            if (!customerId || !password) {
+                displayMessage('Please enter both Customer ID and Password.', 'error', 'authMessage');
                 return;
             }
 
-            if (registeredPayors[payorId] && registeredPayors[payorId].password === password) {
-                currentUser = { id: payorId, ...registeredPayors[payorId] };
+            if (registeredCustomers[customerId] && registeredCustomers[customerId].password === password) {
+                currentUser = { id: customerId, ...registeredCustomers[customerId] };
                 displayMessage(`Welcome, ${currentUser.company_name}!`, 'success', 'authMessage');
                 setTimeout(() => showSection('mainApp'), 1000);
             } else {
-                displayMessage(`Invalid Payor ID or Password.`, 'error', 'authMessage');
+                displayMessage(`Invalid Customer ID or Password.`, 'error', 'authMessage');
             }
         }
 
         function register() {
-            const payorId = document.getElementById('registerPayorId').value.trim().toUpperCase();
+            const customerId = document.getElementById('registerCustomerId').value.trim().toUpperCase();
             const companyName = document.getElementById('registerCompanyName').value.trim();
             const password = document.getElementById('registerPassword').value;
-            const payorType = document.getElementById('registerPayorType').value;
+            const customerType = document.getElementById('registerCustomerType').value;
 
-            if (!payorId || !companyName || !password || !payorType) {
+            if (!customerId || !companyName || !password || !customerType) {
                 displayMessage('All registration fields are required.', 'error', 'authMessage');
                 return;
             }
-            if (registeredPayors[payorId]) {
-                displayMessage(`Payor ID '${payorId}' already exists. Please choose another.`, 'error', 'authMessage');
+            if (registeredCustomers[customerId]) {
+                displayMessage(`Customer ID '${customerId}' already exists. Please choose another.`, 'error', 'authMessage');
                 return;
             }
 
-            registeredPayors[payorId] = { company_name: companyName, payor_type: payorType, password: password };
-            currentUser = { id: payorId, ...registeredPayors[payorId] };
+            registeredCustomers[customerId] = { company_name: companyName, customer_type: customerType, password: password };
+            currentUser = { id: customerId, ...registeredCustomers[customerId] };
             displayMessage(`Registration successful! Welcome, ${currentUser.company_name}!`, 'success', 'authMessage');
             // Clear registration fields
-            document.getElementById('registerPayorId').value = '';
+            document.getElementById('registerCustomerId').value = '';
             document.getElementById('registerCompanyName').value = '';
             document.getElementById('registerPassword').value = '';
-            document.getElementById('registerPayorType').value = '';
+            document.getElementById('registerCustomerType').value = '';
             setTimeout(() => showSection('mainApp'), 1000);
         }
 
         function logout() {
             currentUser = null;
             displayMessage('You have been logged out.', 'info', 'authMessage');
-            document.getElementById('loginPayorId').value = ''; // Clear login field
+            document.getElementById('loginCustomerId').value = ''; // Clear login field
             document.getElementById('loginPassword').value = ''; // Clear password field
             showSection('authSection');
         }
@@ -553,17 +672,17 @@
                 return;
             }
 
-            document.getElementById('accountPayorId').innerText = currentUser.id;
+            document.getElementById('accountCustomerId').innerText = currentUser.id;
             document.getElementById('accountCompanyName').innerText = currentUser.company_name;
-            document.getElementById('accountPayorType').innerText = currentUser.payor_type;
+            document.getElementById('accountCustomerType').innerText = currentUser.customer_type;
 
             const paymentHistoryBody = document.getElementById('paymentHistoryBody');
             paymentHistoryBody.innerHTML = ''; // Clear previous history
 
-            const userPayments = allPayments.filter(p => p.payor_id === currentUser.id);
+            const userPayments = allPayments.filter(p => p.customer_id === currentUser.id);
 
             if (userPayments.length === 0) {
-                paymentHistoryBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500">No payment history found for this account.</td></tr>`;
+                paymentHistoryBody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-gray-500">No payment history found for this account.</td></tr>`;
             } else {
                 userPayments.forEach(payment => {
                     const row = document.createElement('tr');
@@ -572,6 +691,9 @@
                         <td class="px-3 py-2.5 whitespace-nowrap">${formatCurrency(payment.amount)}</td>
                         <td class="px-3 py-2.5 whitespace-nowrap">${payment.date}</td>
                         <td class="px-3 py-2.5 whitespace-nowrap">${payment.status}</td>
+                        <td class="px-3 py-2.5 whitespace-nowrap">
+                            <button onclick="viewPermitFromHistory('${payment.permit_id}')" class="btn btn-primary py-1 px-2 text-xs">View Permit</button>
+                        </td>
                     `;
                     paymentHistoryBody.appendChild(row);
                 });
@@ -583,168 +705,201 @@
             document.getElementById('accountModal').classList.add('hidden');
         }
 
-        // --- Fee Calculation and Payment Functions (from previous version, slightly modified) ---
-        function calculateFees() {
+        // --- Permit Application & Fee Calculation ---
+        function submitPermitApplication() {
             if (!currentUser) {
-                displayMessage('Please login first to calculate fees.', 'error', 'authMessage');
+                displayMessage('Please login first to submit a permit application.', 'error', 'authMessage');
                 showSection('authSection');
                 return;
             }
 
+            // Disable buttons during processing
             setPaymentButtonsState(true);
-            document.getElementById('newCalculationBtn').classList.add('hidden');
-            document.getElementById('paymentMessage').classList.add('hidden');
+            const submitPermitBtn = document.getElementById('permitApplicationSection').querySelector('button');
+            if (submitPermitBtn) {
+                submitPermitBtn.disabled = true; // Disable submit permit button
+            }
+            document.getElementById('applicationMessage').classList.add('hidden'); // Clear previous app message
+            document.getElementById('paymentMessage').classList.add('hidden');     // Clear previous payment message
 
-            const vesselType = document.getElementById('vesselType').value;
-            const grt = parseFloat(document.getElementById('grt').value);
-            const days = parseFloat(document.getElementById('days').value);
-            const lineMoves = parseFloat(document.getElementById('lineMoves').value);
-            const containerCount = parseFloat(document.getElementById('containerCount').value);
-            const cargoStorageDays = parseFloat(document.getElementById('cargoStorageDays').value);
+            displayMessage('Submitting permit application and calculating fees... Please wait.', 'info', 'applicationMessage');
 
-            let totalFeesPhp = 0;
-            const feeDetails = [];
+            // Simulate permit application and automated approval
+            setTimeout(() => {
+                // Generate a new permit ID
+                currentPermitId = generatePermitId();
 
-            // --- Vessel Charges ---
-            if (vesselType === "International Foreign") {
-                // Harbor Fee
-                const harborFeeUsd = grt * TARIFF["International Foreign"].harborFee;
-                feeDetails.push({
-                    type: "Harbor Fee",
-                    description: `${grt} GRT @ $${TARIFF["International Foreign"].harborFee.toFixed(4)}/GRT`,
-                    amount: usdToPhp(harborFeeUsd)
-                });
-                totalFeesPhp += usdToPhp(harborFeeUsd);
+                // Get validity duration from 'days' input for vessel-related permits, or a default for cargo
+                const permitTypeInput = document.getElementById('permitType').value;
+                const daysInput = parseFloat(document.getElementById('days').value) || 0;
+                let validityDays = 0;
 
-                // Berthing Fee
-                const berthingFeeUsd = grt * TARIFF["International Foreign"].berthingFee * days;
-                feeDetails.push({
-                    type: "Berthing Fee",
-                    description: `${grt} GRT for ${days} days @ $${TARIFF["International Foreign"].berthingFee.toFixed(4)}/GRT/day`,
-                    amount: usdToPhp(berthingFeeUsd)
-                });
-                totalFeesPhp += usdToPhp(berthingFeeUsd);
+                if (permitTypeInput === "Vessel Entry" || permitTypeInput === "Tug Service") {
+                    validityDays = daysInput; // Use days at port for vessel permits
+                } else {
+                    validityDays = 30; // Default 30 days for cargo permits if no specific duration
+                }
 
-                // Harbor Cleaning Fee
-                let harborCleaningRateUsd = 0;
-                for (const range of TARIFF["International Foreign"].harborCleaning) {
-                    if ((range.grtMax && grt <= range.grtMax) || (range.grtMin && grt >= range.grtMin)) {
-                        harborCleaningRateUsd = range.rate;
-                        break;
+                const issueDate = new Date();
+                const expiryDate = new Date(issueDate);
+                expiryDate.setDate(issueDate.getDate() + validityDays);
+
+
+                // Store permit details for later viewing
+                currentPermitDetails = {
+                    permitId: currentPermitId,
+                    customerName: currentUser.company_name,
+                    permitType: permitTypeInput,
+                    vesselName: document.getElementById('vesselName').value || 'N/A',
+                    grt: parseFloat(document.getElementById('grt').value) || 0,
+                    days: parseFloat(document.getElementById('days').value) || 0,
+                    lineMoves: parseFloat(document.getElementById('lineMoves').value) || 0,
+                    containerCount: parseFloat(document.getElementById('containerCount').value) || 0,
+                    cargoStorageDays: parseFloat(document.getElementById('cargoStorageDays').value) || 0,
+                    issueDate: issueDate.toISOString().slice(0, 10),
+                    expiryDate: expiryDate.toISOString().slice(0, 10),
+                    status: "Approved" // Simulated automated approval
+                };
+
+                // Call the fee calculation logic
+                const permitType = currentPermitDetails.permitType;
+                const grt = currentPermitDetails.grt;
+                const days = currentPermitDetails.days;
+                const lineMoves = currentPermitDetails.lineMoves;
+                const containerCount = currentPermitDetails.containerCount;
+                const cargoStorageDays = currentPermitDetails.cargoStorageDays;
+
+                let totalFeesPhp = 0;
+                const feeDetails = [];
+
+                // --- Vessel Charges ---
+                // Simplified logic based on permitType for demo purposes
+                if (permitType === "Vessel Entry" || permitType === "Tug Service") {
+                    // Assuming International Foreign rates for simplicity if Vessel Entry or Tug Service
+                    const harborFeeUsd = grt * TARIFF["International Foreign"].harborFee;
+                    feeDetails.push({
+                        type: "Harbor Fee",
+                        description: `${grt} GRT @ $${TARIFF["International Foreign"].harborFee.toFixed(4)}/GRT`,
+                        amount: usdToPhp(harborFeeUsd)
+                    });
+                    totalFeesPhp += usdToPhp(harborFeeUsd);
+
+                    const berthingFeeUsd = grt * TARIFF["International Foreign"].berthingFee * days;
+                    feeDetails.push({
+                        type: "Berthing Fee",
+                        description: `${grt} GRT for ${days} days @ $${TARIFF["International Foreign"].berthingFee.toFixed(4)}/GRT/day`,
+                        amount: usdToPhp(berthingFeeUsd)
+                    });
+                    totalFeesPhp += usdToPhp(berthingFeeUsd);
+
+                    let harborCleaningRateUsd = 0;
+                    for (const range of TARIFF["International Foreign"].harborCleaning) {
+                        if ((range.grtMax && grt <= range.grtMax) || (range.grtMin && grt >= range.grtMin)) {
+                            harborCleaningRateUsd = range.rate;
+                            break;
+                        }
+                    }
+                    const harborCleaningFeeUsd = harborCleaningRateUsd * days;
+                    feeDetails.push({
+                        type: "Harbor Cleaning Fee",
+                        description: `Vessel ${grt} GRT for ${days} days @ $${harborCleaningRateUsd.toFixed(2)}/day`,
+                        amount: usdToPhp(harborCleaningFeeUsd)
+                    });
+                    totalFeesPhp += usdToPhp(harborCleaningFeeUsd);
+
+                    if (lineMoves > 0) {
+                        const lineHandlingFeeUsd = lineMoves * TARIFF["International Foreign"].lineHandling;
+                        feeDetails.push({
+                            type: "Line Handling",
+                            description: `${lineMoves} moves @ $${TARIFF["International Foreign"].lineHandling.toFixed(2)}/move`,
+                            amount: usdToPhp(lineHandlingFeeUsd)
+                        });
+                        totalFeesPhp += usdToPhp(lineHandlingFeeUsd);
                     }
                 }
-                const harborCleaningFeeUsd = harborCleaningRateUsd * days;
-                feeDetails.push({
-                    type: "Harbor Cleaning Fee",
-                    description: `Vessel ${grt} GRT for ${days} days @ $${harborCleaningRateUsd.toFixed(2)}/day`,
-                    amount: usdToPhp(harborCleaningFeeUsd)
-                });
-                totalFeesPhp += usdToPhp(harborCleaningFeeUsd);
 
-                // Line Handling
-                if (lineMoves > 0) {
-                    const lineHandlingFeeUsd = lineMoves * TARIFF["International Foreign"].lineHandling;
+                // --- Cargo Charges (Foreign Import 20ft FCL) ---
+                if (containerCount > 0 && (permitType === "Cargo Import" || permitType === "Cargo Export" || permitType === "Cargo Transshipment")) {
+                    const cargoTariff = TARIFF["CargoForeignFCL20ft"];
+
+                    const processingFeePhp = cargoTariff.processingFee * containerCount;
                     feeDetails.push({
-                        type: "Line Handling",
-                        description: `${lineMoves} moves @ $${TARIFF["International Foreign"].lineHandling.toFixed(2)}/move`,
-                        amount: usdToPhp(lineHandlingFeeUsd)
+                        type: "Cargo Processing Fee",
+                        description: `${containerCount} containers @ PHP ${cargoTariff.processingFee.toFixed(2)}/container`,
+                        amount: processingFeePhp
                     });
-                    totalFeesPhp += usdToPhp(lineHandlingFeeUsd);
-                }
+                    totalFeesPhp += processingFeePhp;
 
-            } else if (vesselType === "Domestic Coastal") {
-                // Port Usage Fee
-                let portUsageRateUsd = 0;
-                let portUsageUnit = "";
-                for (const range of TARIFF["Domestic Coastal"].portUsageFee) {
-                    if ((range.grtMax && grt <= range.grtMax) || (range.grtMin && grt >= range.grtMin)) {
-                        portUsageRateUsd = range.rate;
-                        portUsageUnit = range.unit;
-                        break;
+                    const wharfageFeePhp = cargoTariff.wharfageFee * containerCount;
+                    feeDetails.push({
+                        type: "Cargo Wharfage Fee (20ft FCL)",
+                        description: `${containerCount} containers @ PHP ${cargoTariff.wharfageFee.toFixed(2)}/container`,
+                        amount: wharfageFeePhp
+                    });
+                    totalFeesPhp += wharfageFeePhp;
+
+                    if (cargoStorageDays > 0) {
+                        const storageFeeUsd = cargoTariff.storageFee * containerCount * cargoStorageDays;
+                        feeDetails.push({
+                            type: "Cargo Storage Fee (20ft FCL)",
+                            description: `${containerCount} containers for ${cargoStorageDays} days @ $${cargoTariff.storageFee.toFixed(2)}/container/day`,
+                            amount: usdToPhp(storageFeeUsd)
+                        });
+                        totalFeesPhp += usdToPhp(storageFeeUsd);
                     }
                 }
-                let portUsageFeeUsd = 0;
-                if (portUsageUnit === "per day") {
-                    portUsageFeeUsd = portUsageRateUsd * days;
-                } else if (portUsageUnit === "per GRT per day") {
-                    portUsageFeeUsd = portUsageRateUsd * grt * days;
-                }
-                feeDetails.push({
-                    type: "Port Usage Fee",
-                    description: `${grt} GRT for ${days} days @ $${portUsageRateUsd.toFixed(4)} ${portUsageUnit}`,
-                    amount: usdToPhp(portUsageFeeUsd)
-                });
-                totalFeesPhp += usdToPhp(portUsageFeeUsd);
 
-                // Line Handling (assuming same as foreign for simplicity)
-                if (lineMoves > 0) {
-                    const lineHandlingFeeUsd = lineMoves * TARIFF["Domestic Coastal"].lineHandling;
-                    feeDetails.push({
-                        type: "Line Handling",
-                        description: `${lineMoves} moves @ $${TARIFF["Domestic Coastal"].lineHandling.toFixed(2)}/move`,
-                        amount: usdToPhp(lineHandlingFeeUsd)
+
+                // Update UI with calculated fees
+                const feeDetailsBody = document.getElementById('feeDetailsBody');
+                if (feeDetailsBody) {
+                    feeDetailsBody.innerHTML = ''; // Clear previous details
+                }
+
+
+                if (feeDetails.length === 0) {
+                    if (feeDetailsBody) {
+                        feeDetailsBody.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-gray-500">No fees calculated for this application. Please check inputs.</td></tr>`;
+                    }
+                    const feeTotalFooter = document.getElementById('feeTotalFooter');
+                    if (feeTotalFooter) {
+                        feeTotalFooter.classList.add('hidden');
+                    }
+                    setPaymentButtonsState(true); // Keep payment buttons disabled if no fees
+                    displayMessage(`Permit ${currentPermitId} submitted. No fees calculated.`, 'error', 'applicationMessage');
+                } else {
+                    feeDetails.forEach(fee => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-2 py-2 whitespace-nowrap">${fee.type}</td>
+                            <td class="px-2 py-2">${fee.description}</td>
+                            <td class="px-2 py-2 whitespace-nowrap text-right">${formatCurrency(fee.amount)}</td>
+                        `;
+                        if (feeDetailsBody) {
+                            feeDetailsBody.appendChild(row);
+                        }
                     });
-                    totalFeesPhp += usdToPhp(lineHandlingFeeUsd);
+                    const totalAmountElement = document.getElementById('totalAmount');
+                    if (totalAmountElement) {
+                        totalAmountElement.innerText = formatCurrency(totalFeesPhp);
+                    }
+                    const feeTotalFooter = document.getElementById('feeTotalFooter');
+                    if (feeTotalFooter) {
+                        feeTotalFooter.classList.remove('hidden');
+                    }
+                    setPaymentButtonsState(false); // Enable payment buttons if fees are calculated
+                    displayMessage(`Permit ${currentPermitId} submitted and fees calculated. Ready for payment.`, 'success', 'applicationMessage');
+
+                    // Scroll to fee summary section
+                    const feeSummarySection = document.getElementById('feeSummarySection');
+                    if (feeSummarySection) {
+                        feeSummarySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 }
-            }
-
-            // --- Cargo Charges (Foreign Import 20ft FCL) ---
-            if (containerCount > 0) {
-                const cargoTariff = TARIFF["CargoForeignFCL20ft"];
-
-                // Processing Fee
-                const processingFeePhp = cargoTariff.processingFee * containerCount;
-                feeDetails.push({
-                    type: "Cargo Processing Fee",
-                    description: `${containerCount} containers @ PHP ${cargoTariff.processingFee.toFixed(2)}/container`,
-                    amount: processingFeePhp
-                });
-                totalFeesPhp += processingFeePhp;
-
-                // Wharfage Fee
-                const wharfageFeePhp = cargoTariff.wharfageFee * containerCount;
-                feeDetails.push({
-                    type: "Cargo Wharfage Fee (20ft FCL)",
-                    description: `${containerCount} containers @ PHP ${cargoTariff.wharfageFee.toFixed(2)}/container`,
-                    amount: wharfageFeePhp
-                });
-                totalFeesPhp += wharfagePhp;
-
-                // Storage Fee
-                if (cargoStorageDays > 0) {
-                    const storageFeeUsd = cargoTariff.storageFee * containerCount * cargoStorageDays;
-                    feeDetails.push({
-                        type: "Cargo Storage Fee (20ft FCL)",
-                        description: `${containerCount} containers for ${cargoStorageDays} days @ $${cargoTariff.storageFee.toFixed(2)}/container/day`,
-                        amount: usdToPhp(storageFeeUsd)
-                    });
-                    totalFeesPhp += usdToPhp(storageFeeUsd);
+                if (submitPermitBtn) {
+                    submitPermitBtn.disabled = false; // Re-enable submit permit button
                 }
-            }
-
-            // Update UI
-            const feeDetailsBody = document.getElementById('feeDetailsBody');
-            feeDetailsBody.innerHTML = ''; // Clear previous details
-
-            if (feeDetails.length === 0) {
-                feeDetailsBody.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-gray-500">No fees calculated. Please check your inputs.</td></tr>`;
-                document.getElementById('feeTotalFooter').classList.add('hidden');
-                setPaymentButtonsState(true); // Keep buttons disabled if no fees
-            } else {
-                feeDetails.forEach(fee => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="px-3 py-2.5 whitespace-nowrap">${fee.type}</td>
-                        <td class="px-3 py-2.5">${fee.description}</td>
-                        <td class="px-3 py-2.5 whitespace-nowrap text-right">${formatCurrency(fee.amount)}</td>
-                    `;
-                    feeDetailsBody.appendChild(row);
-                });
-                document.getElementById('totalAmount').innerText = formatCurrency(totalFeesPhp);
-                document.getElementById('feeTotalFooter').classList.remove('hidden');
-                setPaymentButtonsState(false); // Enable payment buttons if fees are calculated
-                currentPermitId = generatePermitId(); // Generate a new permit ID for this calculation
-            }
+            }, 2000); // Simulate network delay for application and calculation
         }
 
         function initiatePayment(method) {
@@ -752,7 +907,7 @@
             const totalAmountValue = parseFloat(totalAmountText.replace('PHP ', '').replace(/,/g, ''));
 
             if (totalAmountValue === 0 || document.getElementById('feeTotalFooter').classList.contains('hidden')) {
-                displayMessage('Please calculate fees first.', 'error');
+                displayMessage('Please submit a permit application and calculate fees first.', 'error');
                 return;
             }
             if (!currentUser) {
@@ -760,59 +915,189 @@
                 showSection('authSection');
                 return;
             }
+            if (!currentPermitId) {
+                displayMessage('No permit application found for payment. Please submit an application first.', 'error');
+                return;
+            }
 
             setPaymentButtonsState(true); // Disable buttons during processing
-            document.getElementById('newCalculationBtn').classList.add('hidden'); // Hide reset button during payment
+            document.getElementById('applicationMessage').classList.add('hidden'); // Clear application message
+            document.getElementById('paymentMessage').classList.add('hidden');     // Clear payment message
 
-            displayMessage(`Processing payment via ${method}... Please wait.`, 'info');
+            displayMessage(`Processing payment for Permit ID ${currentPermitId} via ${method}... Please wait.`, 'info');
 
             // Simulate API call to payment gateway
             setTimeout(() => {
                 const success = Math.random() > 0.1; // 90% chance of success
 
                 if (success) {
-                    displayMessage(`Payment of ${totalAmountText} via ${method} successful! Permit ID: ${currentPermitId}. An official receipt will be sent to your registered email.`, 'success');
+                    displayMessage(`Payment of ${totalAmountText} via ${method} successful!`, 'success');
                     // Record the payment
                     allPayments.push({
-                        payor_id: currentUser.id,
+                        customer_id: currentUser.id,
                         permit_id: currentPermitId,
                         amount: totalAmountValue,
-                        date: new Date().toISOString().slice(0, 10), // YYYY-MM-DD
+                        date: new Date().toISOString().slice(0, 10), //YYYY-MM-DD
                         status: "Completed"
                     });
 
-                    document.getElementById('feeDetailsBody').innerHTML = `<tr><td colspan="3" class="text-center py-6 text-gray-500">Payment completed. You can start a new calculation.</td></tr>`;
-                    document.getElementById('feeTotalFooter').classList.add('hidden');
-                    document.getElementById('newCalculationBtn').classList.remove('hidden'); // Show reset button
+                    // Transition to permit completion page
+                    const completedPermitIdElement = document.getElementById('completedPermitId');
+                    if (completedPermitIdElement) {
+                        completedPermitIdElement.innerText = currentPermitId;
+                    }
+                    showSection('permitCompletion');
+
                 } else {
-                    displayMessage(`Payment via ${method} failed. Please try again or choose another method.`, 'error');
+                    displayMessage(`Payment via ${method} failed for Permit ID ${currentPermitId}. Please try again or choose another method.`, 'error');
                     setPaymentButtonsState(false); // Re-enable buttons on failure
                 }
             }, 2000); // Simulate network delay
         }
 
+        function completePermitApplication() {
+            // Simulate sending final confirmation to SBMA eTAPS
+            // In a real system, this would be an API call to SBMA's backend
+            displayMessage(`Finalizing permit application for Permit ID ${currentPermitId}...`, 'info', 'applicationMessage'); // Using applicationMessage for this
+            setTimeout(() => {
+                displayMessage(`Permit ID ${currentPermitId} successfully finalized with SBMA. You will receive an official confirmation.`, 'success', 'applicationMessage');
+                
+                // Show the "View Your Permit" button
+                const viewPermitBtn = document.getElementById('viewPermitBtn');
+                if (viewPermitBtn) {
+                    viewPermitBtn.classList.remove('hidden');
+                }
+                // Store the current permit details in the completedPermits array
+                completedPermits.push({ ...currentPermitDetails });
+
+            }, 1500);
+        }
+
+        function openPermitViewModal() {
+            if (!currentPermitDetails || !currentPermitDetails.permitId) {
+                displayMessage('No permit details available to view.', 'error', 'applicationMessage');
+                return;
+            }
+            populatePermitViewModal(currentPermitDetails);
+            document.getElementById('permitViewModal').classList.remove('hidden');
+        }
+
+        function viewPermitFromHistory(permitId) {
+            const permit = completedPermits.find(p => p.permitId === permitId);
+            if (permit) {
+                populatePermitViewModal(permit);
+                document.getElementById('permitViewModal').classList.remove('hidden');
+            } else {
+                displayMessage(`Permit with ID ${permitId} not found.`, 'error', 'accountMessage'); // Use accountMessage for modal
+            }
+        }
+
+        function populatePermitViewModal(permit) {
+            document.getElementById('permitViewId').innerText = permit.permitId;
+            document.getElementById('permitViewCustomer').innerText = permit.customerName;
+            document.getElementById('permitViewType').innerText = permit.permitType;
+            document.getElementById('permitViewVessel').innerText = permit.vesselName;
+            document.getElementById('permitViewGrt').innerText = permit.grt > 0 ? permit.grt.toLocaleString() : 'N/A';
+            document.getElementById('permitViewDays').innerText = permit.days > 0 ? permit.days.toLocaleString() : 'N/A';
+            document.getElementById('permitViewContainers').innerText = permit.containerCount > 0 ? permit.containerCount.toLocaleString() : 'N/A';
+            document.getElementById('permitViewCargoDays').innerText = permit.cargoStorageDays > 0 ? permit.cargoStorageDays.toLocaleString() : 'N/A';
+            document.getElementById('permitViewValidity').innerText = `${permit.issueDate} to ${permit.expiryDate}`;
+
+            // Generate QR Code
+            const qrCodeData = permit.permitId;
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrCodeData)}`;
+            const permitQrCodeElement = document.getElementById('permitQrCode');
+            if (permitQrCodeElement) {
+                permitQrCodeElement.src = qrCodeUrl;
+            }
+        }
+
+        function closePermitViewModal() {
+            document.getElementById('permitViewModal').classList.add('hidden');
+        }
+
+
         function resetForm() {
-            // Reset input values
-            document.getElementById('vesselType').value = "International Foreign";
-            document.getElementById('grt').value = "10000";
-            document.getElementById('days').value = "3";
-            document.getElementById('lineMoves').value = "2";
-            document.getElementById('containerCount').value = "5";
-            document.getElementById('cargoStorageDays').value = "7";
+            // Reset input values for permit application
+            const permitType = document.getElementById('permitType');
+            if (permitType) permitType.value = "Vessel Entry";
+            
+            const vesselName = document.getElementById('vesselName');
+            if (vesselName) vesselName.value = "";
+            
+            const grt = document.getElementById('grt');
+            if (grt) grt.value = "10000";
+            
+            const days = document.getElementById('days');
+            if (days) days.value = "3";
+            
+            const lineMoves = document.getElementById('lineMoves');
+            if (lineMoves) lineMoves.value = "2";
+            
+            const containerCount = document.getElementById('containerCount');
+            if (containerCount) containerCount.value = "5";
+            
+            const cargoStorageDays = document.getElementById('cargoStorageDays');
+            if (cargoStorageDays) cargoStorageDays.value = "7";
 
-            // Clear fee summary
-            document.getElementById('feeDetailsBody').innerHTML = `<tr><td colspan="3" class="text-center py-6 text-gray-500">Enter details and click "Calculate Fees" to see the summary.</td></tr>`;
-            document.getElementById('feeTotalFooter').classList.add('hidden');
-            document.getElementById('totalAmount').innerText = "PHP 0.00";
+            // Clear fee summary display
+            const feeDetailsBody = document.getElementById('feeDetailsBody');
+            if (feeDetailsBody) {
+                feeDetailsBody.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-gray-500">Submit a permit application to see the fee summary.</td></tr>`;
+            }
+            const feeTotalFooter = document.getElementById('feeTotalFooter');
+            if (feeTotalFooter) {
+                feeTotalFooter.classList.add('hidden');
+            }
+            const totalAmount = document.getElementById('totalAmount');
+            if (totalAmount) {
+                totalAmount.innerText = "PHP 0.00";
+            }
 
-            // Clear messages and hide reset button
-            document.getElementById('paymentMessage').classList.add('hidden');
-            document.getElementById('paymentMessage').innerHTML = '';
-            document.getElementById('newCalculationBtn').classList.add('hidden');
+            // Clear messages and hide specific buttons/sections
+            const applicationMessage = document.getElementById('applicationMessage');
+            if (applicationMessage) {
+                applicationMessage.classList.add('hidden');
+                applicationMessage.innerHTML = '';
+            }
+            const paymentMessage = document.getElementById('paymentMessage');
+            if (paymentMessage) {
+                paymentMessage.classList.add('hidden');
+                paymentMessage.innerHTML = '';
+            }
+            
+            const viewPermitBtn = document.getElementById('viewPermitBtn'); // Reference the correct button
+            if (viewPermitBtn) {
+                viewPermitBtn.classList.add('hidden');
+            }
             currentPermitId = ''; // Clear current permit ID
+            currentPermitDetails = {}; // Clear permit details
+            // Do NOT clear completedPermits here, as it's the history
 
-            // Re-enable payment buttons
-            setPaymentButtonsState(false);
+            // Ensure correct section visibility
+            const permitApplicationSection = document.getElementById('permitApplicationSection');
+            if (permitApplicationSection) {
+                permitApplicationSection.classList.remove('hidden'); // Show application form
+            }
+            const feeSummarySection = document.getElementById('feeSummarySection');
+            if (feeSummarySection) {
+                feeSummarySection.classList.remove('hidden'); // Show fee summary
+            }
+            const paymentSection = document.getElementById('paymentSection');
+            if (paymentSection) {
+                paymentSection.classList.remove('hidden'); // Show payment section
+            }
+            const permitCompletionSection = document.getElementById('permitCompletionSection');
+            if (permitCompletionSection) {
+                permitCompletionSection.classList.add('hidden'); // Hide completion page
+            }
+
+            // Re-enable buttons for a new application
+            const submitPermitButton = document.getElementById('permitApplicationSection')?.querySelector('button');
+            if (submitPermitButton) {
+                submitPermitButton.disabled = false; // Re-enable submit permit button
+            }
+            setPaymentButtonsState(true); // Payment buttons should be disabled until application is submitted again
         }
 
         // Initial state: show authentication section
