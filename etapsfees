@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eTAPS Pay Portal (Fees Only)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top for better scrollability on smaller screens */
+            min-height: 100vh;
+            padding: 1rem; /* Reduced padding */
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 1rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+            padding: 1.5rem; /* Reduced padding from 2.5rem */
+            width: 100%;
+            max-width: 960px; /* max-w-4xl */
+            margin-top: 1rem; /* Reduced margin-top from 2rem */
+            margin-bottom: 1rem; /* Added bottom margin for spacing */
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.25rem; /* Reduced margin */
+            font-weight: 500;
+            color: #4a5568; /* text-gray-700 */
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.625rem; /* p-2.5, slightly reduced */
+            border: 1px solid #e2e8f0; /* border-gray-300 */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-size: 0.95rem; /* Slightly smaller font */
+            color: #2d3748; /* text-gray-800 */
+            transition: border-color 0.2s ease-in-out;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #3b82f6; /* border-blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); /* ring-2 ring-blue-200 */
+        }
+        .btn {
+            padding: 0.75rem 1.25rem; /* py-3 px-5, slightly reduced */
+            border-radius: 0.75rem; /* rounded-xl */
+            font-weight: 600; /* font-semibold */
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background-color: #2563eb; /* bg-blue-600 */
+            color: #ffffff;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #1d4ed8; /* bg-blue-700 */
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background-color: #4CAF50; /* A shade of green for success/payment */
+            color: #ffffff;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #45a049;
+            transform: translateY(-1px);
+        }
+        .btn-tertiary {
+            background-color: #8b5cf6; /* bg-purple-600 */
+            color: #ffffff;
+        }
+        .btn-tertiary:hover:not(:disabled) {
+            background-color: #7c3aed; /* bg-purple-700 */
+            transform: translateY(-1px);
+        }
+        .btn-danger {
+            background-color: #ef4444; /* bg-red-500 */
+            color: #ffffff;
+        }
+        .btn-danger:hover:not(:disabled) {
+            background-color: #dc2626; /* bg-red-600 */
+            transform: translateY(-1px);
+        }
+        .fee-table th, .fee-table td {
+            padding: 0.5rem 0.75rem; /* py-2 px-3, slightly reduced */
+            text-align: left;
+        }
+        .fee-table th {
+            background-color: #edf2f7; /* bg-gray-100 */
+            font-weight: 600;
+            color: #2d3748; /* text-gray-800 */
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .fee-table td {
+            border-bottom: 1px solid #edf2f7;
+            color: #4a5568; /* text-gray-700 */
+        }
+        .fee-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .total-row {
+            font-weight: 700;
+            background-color: #e0f2fe; /* bg-blue-50 */
+            color: #1e40af; /* text-blue-800 */
+        }
+        .message-box {
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem; /* Reduced margin */
+            font-weight: 500;
+            text-align: center;
+        }
+        .message-success {
+            background-color: #d1fae5; /* bg-green-100 */
+            color: #065f46; /* text-green-800 */
+        }
+        .message-error {
+            background-color: #fee2e2; /* bg-red-100 */
+            color: #991b1b; /* text-red-800 */
+        }
+        .message-info {
+            background-color: #e0f2fe; /* bg-blue-100 */
+            color: #1e40af; /* text-blue-800 */
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 90%;
+            max-width: 700px;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Centered login/registration sections */
+        .auth-card {
+            max-width: 400px; /* Smaller max-width */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .permit-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        .permit-detail-row:last-child {
+            border-bottom: none;
+        }
+        .permit-detail-label {
+            font-weight: 500;
+            color: #4a5568;
+        }
+        .permit-detail-value {
+            color: #2d3748;
+            text-align: right;
+        }
+        .permit-status-approved {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <div id="navbar" class="flex justify-between items-center mb-4 hidden"> <!-- Reduced mb-6 to mb-4 -->
+            <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800">
+                <span class="text-blue-600">eTAPS Pay</span>
+            </h1>
+            <div class="flex gap-2">
+                <button onclick="showSection('mainApp')" class="btn btn-tertiary text-sm md:text-base">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 00-1-1H7a1 1 0 00-1 1v2h-.586l.293.293A1 1 0 006 18h8a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                    Fee Calculator
+                </button>
+                <button onclick="openAccountModal()" class="btn btn-tertiary text-sm md:text-base">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                    My Account
+                </button>
+                <button onclick="logout()" class="btn btn-danger text-sm md:text-base">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path></svg>
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Login/Registration Section -->
+        <div id="authSection" class="w-full">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Welcome to eTAPS Pay</h2>
+            <p class="text-center text-gray-600 mb-8">Please log in or register to proceed.</p>
+
+            <div class="bg-blue-50 p-6 rounded-xl mb-6 shadow-sm auth-card">
+                <h3 class="text-xl font-semibold text-blue-800 mb-4">Login</h3>
+                <div class="input-group mb-4">
+                    <label for="loginCustomerId">Customer ID</label>
+                    <input type="text" id="loginCustomerId" placeholder="e.g., DEMOUSER1" class="focus:border-blue-500 focus:ring-blue-200">
+                </div>
+                <div class="input-group mb-4">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" class="focus:border-blue-500 focus:ring-blue-200">
+                </div>
+                <button onclick="login()" class="btn btn-primary w-full">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                    Login
+                </button>
+            </div>
+
+            <div class="bg-gray-100 p-6 rounded-xl shadow-sm auth-card">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Register New Customer</h3>
+                <div class="input-group mb-4">
+                    <label for="registerCustomerId">New Customer ID</label>
+                    <input type="text" id="registerCustomerId" placeholder="Choose a unique ID (e.g., MYCO001)" class="focus:border-blue-500 focus:ring-blue-200">
+                </div>
+                <div class="input-group mb-4">
+                    <label for="registerCompanyName">Company Name</label>
+                    <input type="text" id="registerCompanyName" placeholder="e.g., My Company Inc." class="focus:border-blue-500 focus:ring-blue-200">
+                </div>
+                <div class="input-group mb-4">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="Set your password" class="focus:border-blue-500 focus:ring-blue-200">
+                </div>
+                <div class="input-group mb-4">
+                    <label for="registerCustomerType">Customer Type</label>
+                    <select id="registerCustomerType" class="focus:border-blue-500 focus:ring-blue-200">
+                        <option value="">Select Type</option>
+                        <option value="Vessel Agent">Vessel Agent</option>
+                        <option value="Cargo Owner">Cargo Owner</option>
+                        <option value="Freight Forwarder">Freight Forwarder</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button onclick="register()" class="btn btn-tertiary w-full">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM.024 14.586A2 2 0 012 13h16a2 2 0 011.976 1.586A6 6 0 0110 18a6 6 0 01-9.976-3.414zM14 5a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1V6a1 1 0 011-1z"></path></svg>
+                    Register
+                </button>
+            </div>
+            <div id="authMessage" class="message-box hidden"></div>
+        </div>
+
+        <!-- Main Application Section -->
+        <div id="mainAppSection" class="hidden w-full">
+            <p class="text-center text-gray-600 mb-6 text-sm md:text-base">
+                Welcome to the eTAPS Pay Portal! Calculate your seaport fees and make secure payments easily.
+            </p>
+
+            <!-- Fee Calculation Inputs Section -->
+            <div id="feeCalculationInputsSection" class="bg-blue-50 p-4 rounded-xl mb-4 shadow-sm">
+                <h2 class="text-xl md:text-2xl font-bold text-blue-800 mb-4">1. Calculate Your Fees</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="input-group mb-3">
+                        <label for="permitType">Service/Fee Type</label>
+                        <select id="permitType" class="focus:border-blue-500 focus:ring-blue-200">
+                            <option value="Vessel Entry">Vessel Entry</option>
+                            <option value="Cargo Import">Cargo Import</option>
+                            <option value="Cargo Export">Cargo Export</option>
+                            <option value="Cargo Transshipment">Cargo Transshipment</option>
+                            <option value="Tug Service">Tug Service</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="vesselName">Vessel Name (if applicable)</label>
+                        <input type="text" id="vesselName" placeholder="e.g., MV Sea Breeze" class="focus:border-blue-500 focus:ring-blue-200">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="grt">Gross Registered Tonnage (GRT)</label>
+                        <input type="number" id="grt" value="10000" min="1" placeholder="e.g., 10000" class="focus:border-blue-500 focus:ring-blue-200">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="days">Days at Port (Berthing/Harbor Cleaning)</label>
+                        <input type="number" id="days" value="3" min="1" placeholder="e.g., 3" class="focus:border-blue-500 focus:ring-blue-200">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="lineMoves">Line Handling Moves</label>
+                        <input type="number" id="lineMoves" value="2" min="0" placeholder="e.g., 2" class="focus:border-blue-500 focus:ring-blue-200">
+                    </div>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-3">Cargo Details (Foreign Import 20ft FCL Example)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="input-group mb-3">
+                            <label for="containerCount">Number of 20ft Containers</label>
+                            <input type="number" id="containerCount" value="5" min="0" placeholder="e.g., 5" class="focus:border-blue-500 focus:ring-blue-200">
+                        </div>
+                        <div class="input-group mb-3">
+                            <label for="cargoStorageDays">Cargo Storage Days</label>
+                            <input type="number" id="cargoStorageDays" value="7" min="0" placeholder="e.g., 7" class="focus:border-blue-500 focus:ring-blue-200">
+                        </div>
+                    </div>
+                </div>
+                <button onclick="calculateFees()" class="btn btn-primary w-full md:w-auto">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg>
+                    Calculate Fees
+                </button>
+                <div id="applicationMessage" class="message-box hidden mt-4"></div>
+            </div>
+
+            <!-- Fee Summary Section -->
+            <div id="feeSummarySection" class="bg-white p-4 rounded-xl mb-4 shadow-sm">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">2. Fee Summary</h2>
+                <div id="feeSummary" class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden fee-table">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee Type</th>
+                                <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                <th class="px-2 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount (PHP)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-100" id="feeDetailsBody">
+                            <!-- Fee details will be inserted here by JavaScript -->
+                            <tr>
+                                <td colspan="3" class="text-center py-6 text-gray-500">Enter details and click "Calculate Fees" to see the summary.</td>
+                            </tr>
+                        </tbody>
+                        <tfoot id="feeTotalFooter" class="hidden">
+                            <tr class="total-row">
+                                <td colspan="2" class="px-2 py-2 text-right text-base font-bold">Total Amount Due:</td>
+                                <td class="px-2 py-2 text-right text-lg font-extrabold text-blue-700" id="totalAmount">PHP 0.00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Payment Section -->
+            <div id="paymentSection" class="bg-white p-4 rounded-xl shadow-sm">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">3. Choose Payment Method</h2>
+                <div class="flex flex-col md:flex-row gap-3 mb-4">
+                    <button onclick="initiatePayment('Credit/Debit Card')" class="btn btn-secondary flex-1 payment-button">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"></path></svg>
+                        Credit/Debit Card
+                    </button>
+                    <button onclick="initiatePayment('Online Bank Transfer')" class="btn btn-secondary flex-1 payment-button">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 9a1 1 0 100 2h4a1 1 0 100-2H8z"></path></svg>
+                        Online Bank Transfer
+                    </button>
+                    <button onclick="initiatePayment('E-Wallet')" class="btn btn-secondary flex-1 payment-button">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                        E-Wallet (GCash, PayMaya)
+                    </button>
+                </div>
+                <div id="paymentMessage" class="message-box hidden"></div>
+            </div>
+        </div>
+
+        <!-- Payment Confirmation Section (Simplified) -->
+        <div id="paymentConfirmationSection" class="hidden w-full text-center">
+            <div class="bg-green-50 p-6 rounded-xl mb-6 shadow-sm">
+                <h2 class="text-3xl font-bold text-green-800 mb-4">Payment Confirmed!</h2>
+                <p class="text-lg text-gray-700 mb-4">Your payment for transaction ID: <span id="completedTransactionId" class="font-bold text-blue-600"></span> has been successfully processed.</p>
+                <p class="text-md text-gray-600 mb-8">Thank you for using eTAPS Pay.</p>
+                <button onclick="resetForm()" class="btn btn-tertiary w-full mt-3">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.162a8.01 8.01 0 019.262 6.845 1 1 0 01-1.748.723A6.01 6.01 0 005 6.414V8a1 1 0 01-2 0V3a1 1 0 011-1zm12 16a1 1 0 01-1-1v-2.162a8.01 8.01 0 01-9.262-6.845 1 1 0 011.748-.723A6.01 6.01 0 0015 13.586V12a1 1 0 012 0v5a1 1 0 01-1 1z" clip-rule="evenodd"></path></svg>
+                    Start New Calculation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Account Modal -->
+    <div id="accountModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeAccountModal()">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">My Account</h2>
+
+            <div class="bg-blue-50 p-5 rounded-xl mb-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-blue-800 mb-4">Customer Details</h3>
+                <p class="mb-2"><span class="font-semibold">Customer ID:</span> <span id="accountCustomerId"></span></p>
+                <p class="mb-2"><span class="font-semibold">Company Name:</span> <span id="accountCompanyName"></span></p>
+                <p><span class="font-semibold">Customer Type:</span> <span id="accountCustomerType"></span></p>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Payment History</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden fee-table">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction ID</th>
+                                <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-100" id="paymentHistoryBody">
+                            <tr>
+                                <td colspan="4" class="text-center py-6 text-gray-500">No payment history found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulated Tariff Data (PHP values for demonstration, USD converted)
+        const EXCHANGE_RATE_USD_PHP = 55.00; // Fixed for demo
+
+        const TARIFF = {
+            "International Foreign": {
+                harborFee: 0.0460, // per GRT (USD)
+                berthingFee: 0.0345, // per GRT per day (USD)
+                harborCleaning: [ // per day (USD)
+                    { grtMax: 4999, rate: 10.00 },
+                    { grtMax: 14999, rate: 20.00 },
+                    { grtMin: 15000, rate: 30.00 }
+                ],
+                lineHandling: 30.00 // per move (USD)
+            },
+            "Domestic Coastal": {
+                portUsageFee: [ // per day (USD)
+                    { grtMax: 5, rate: 0, unit: "No Charge" },
+                    { grtMax: 100, rate: 0.632, unit: "per day" },
+                    { grtMin: 101, rate: 0.023, unit: "per GRT per day" }
+                ],
+                lineHandling: 30.00 // per move (USD) - assuming same as foreign for simplicity
+            },
+            "CargoForeignFCL20ft": {
+                processingFee: 300.00, // PHP
+                wharfageFee: 560.90, // PHP per Box
+                storageFee: 13.65 // USD per Box per day (using Sep. 30, 2021 rate)
+            }
+        };
+
+        // --- Simulated User Data and Payments ---
+        let currentUser = null;
+        const registeredCustomers = {
+            "DEMOUSER1": { company_name: "Demo Logistics Corp.", customer_type: "Freight Forwarder", password: "demo123" },
+            "TESTAGENT": { company_name: "Test Vessel Agency", customer_type: "Vessel Agent", password: "testpass" },
+            "CARGOHUB": { company_name: "Cargo Hub Solutions", customer_type: "Cargo Owner", password: "hubcargo" }
+        };
+        const allPayments = [
+            // Sample historical data
+            { customer_id: "DEMOUSER1", transaction_id: "TRANS-001", amount: 15000.00, date: "2024-06-15", status: "Completed" },
+            { customer_id: "TESTAGENT", transaction_id: "TRANS-002", amount: 75000.50, date: "2024-06-20", status: "Completed" },
+            { customer_id: "DEMOUSER1", transaction_id: "TRANS-003", amount: 2200.75, date: "2024-06-25", status: "Completed" }
+        ];
+        let currentTransactionId = ''; // To link payments to a unique transaction
+
+        // --- Utility Functions ---
+        function usdToPhp(amountUsd) {
+            return amountUsd * EXCHANGE_RATE_USD_PHP;
+        }
+
+        function formatCurrency(amount) {
+            return `PHP ${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        }
+
+        function generateTransactionId() {
+            const timestamp = new Date().getTime();
+            return `TRANS-${timestamp.toString().slice(-6)}`; // Simple unique ID for demo
+        }
+
+        function displayMessage(message, type, targetElementId = 'paymentMessage') {
+            const messageBox = document.getElementById(targetElementId);
+            messageBox.classList.remove('hidden', 'message-success', 'message-error', 'message-info');
+            messageBox.classList.add(`message-${type}`);
+            messageBox.innerText = message;
+        }
+
+        function setPaymentButtonsState(disabled) {
+            const payButtons = document.querySelectorAll('.payment-button');
+            payButtons.forEach(button => button.disabled = disabled);
+        }
+
+        // --- Section Visibility Control ---
+        function showSection(sectionId) {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('mainAppSection').classList.add('hidden');
+            document.getElementById('navbar').classList.add('hidden');
+            document.getElementById('accountModal').classList.add('hidden'); // Ensure modal is hidden
+            document.getElementById('paymentConfirmationSection').classList.add('hidden'); // Hide new section
+
+            if (sectionId === 'authSection') {
+                document.getElementById('authSection').classList.remove('hidden');
+            } else if (sectionId === 'mainApp') {
+                if (currentUser) {
+                    document.getElementById('mainAppSection').classList.remove('hidden');
+                    document.getElementById('navbar').classList.remove('hidden');
+                    resetForm(); // Reset calculator when navigating back to it
+                } else {
+                    displayMessage('Please login first to access the calculator.', 'error', 'authMessage');
+                    document.getElementById('authSection').classList.remove('hidden');
+                }
+            }
+        }
+
+        // --- Authentication Functions ---
+        function login() {
+            const customerId = document.getElementById('loginCustomerId').value.trim().toUpperCase();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!customerId || !password) {
+                displayMessage('Please enter both Customer ID and Password.', 'error', 'authMessage');
+                return;
+            }
+
+            if (registeredCustomers[customerId] && registeredCustomers[customerId].password === password) {
+                currentUser = { id: customerId, ...registeredCustomers[customerId] };
+                displayMessage(`Welcome, ${currentUser.company_name}!`, 'success', 'authMessage');
+                setTimeout(() => showSection('mainApp'), 1000);
+            } else {
+                displayMessage(`Invalid Customer ID or Password.`, 'error', 'authMessage');
+            }
+        }
+
+        function register() {
+            const customerId = document.getElementById('registerCustomerId').value.trim().toUpperCase();
+            const companyName = document.getElementById('registerCompanyName').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const customerType = document.getElementById('registerCustomerType').value;
+
+            if (!customerId || !companyName || !password || !customerType) {
+                displayMessage('All registration fields are required.', 'error', 'authMessage');
+                return;
+            }
+            if (registeredCustomers[customerId]) {
+                displayMessage(`Customer ID '${customerId}' already exists. Please choose another.`, 'error', 'authMessage');
+                return;
+            }
+
+            registeredCustomers[customerId] = { company_name: companyName, customer_type: customerType, password: password };
+            currentUser = { id: customerId, ...registeredCustomers[customerId] };
+            displayMessage(`Registration successful! Welcome, ${currentUser.company_name}!`, 'success', 'authMessage');
+            // Clear registration fields
+            document.getElementById('registerCustomerId').value = '';
+            document.getElementById('registerCompanyName').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerCustomerType').value = '';
+            setTimeout(() => showSection('mainApp'), 1000);
+        }
+
+        function logout() {
+            currentUser = null;
+            displayMessage('You have been logged out.', 'info', 'authMessage');
+            document.getElementById('loginCustomerId').value = ''; // Clear login field
+            document.getElementById('loginPassword').value = ''; // Clear password field
+            showSection('authSection');
+        }
+
+        // --- Account Modal Functions ---
+        function openAccountModal() {
+            if (!currentUser) {
+                displayMessage('Please login to view your account.', 'error', 'authMessage');
+                showSection('authSection');
+                return;
+            }
+
+            document.getElementById('accountCustomerId').innerText = currentUser.id;
+            document.getElementById('accountCompanyName').innerText = currentUser.company_name;
+            document.getElementById('accountCustomerType').innerText = currentUser.customer_type;
+
+            const paymentHistoryBody = document.getElementById('paymentHistoryBody');
+            paymentHistoryBody.innerHTML = ''; // Clear previous history
+
+            const userPayments = allPayments.filter(p => p.customer_id === currentUser.id);
+
+            if (userPayments.length === 0) {
+                paymentHistoryBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500">No payment history found for this account.</td></tr>`;
+            } else {
+                userPayments.forEach(payment => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-3 py-2.5 whitespace-nowrap">${payment.transaction_id}</td>
+                        <td class="px-3 py-2.5 whitespace-nowrap">${formatCurrency(payment.amount)}</td>
+                        <td class="px-3 py-2.5 whitespace-nowrap">${payment.date}</td>
+                        <td class="px-3 py-2.5 whitespace-nowrap">${payment.status}</td>
+                    `;
+                    paymentHistoryBody.appendChild(row);
+                });
+            }
+            document.getElementById('accountModal').classList.remove('hidden');
+        }
+
+        function closeAccountModal() {
+            document.getElementById('accountModal').classList.add('hidden');
+        }
+
+        // --- Fee Calculation Logic ---
+        function calculateFees() {
+            if (!currentUser) {
+                displayMessage('Please login first to calculate fees.', 'error', 'applicationMessage');
+                showSection('authSection');
+                return;
+            }
+
+            // Disable buttons during processing
+            setPaymentButtonsState(true);
+            const calculateFeesBtn = document.getElementById('feeCalculationInputsSection').querySelector('button');
+            if (calculateFeesBtn) {
+                calculateFeesBtn.disabled = true; // Disable calculate fees button
+            }
+            document.getElementById('applicationMessage').classList.add('hidden'); // Clear previous message
+            document.getElementById('paymentMessage').classList.add('hidden');     // Clear previous payment message
+
+            displayMessage('Calculating fees... Please wait.', 'info', 'applicationMessage');
+
+            // Simulate fee calculation
+            setTimeout(() => {
+                currentTransactionId = generateTransactionId(); // Generate a transaction ID for the payment
+
+                const permitType = document.getElementById('permitType').value;
+                const grt = parseFloat(document.getElementById('grt').value) || 0;
+                const days = parseFloat(document.getElementById('days').value) || 0;
+                const lineMoves = parseFloat(document.getElementById('lineMoves').value) || 0;
+                const containerCount = parseFloat(document.getElementById('containerCount').value) || 0;
+                const cargoStorageDays = parseFloat(document.getElementById('cargoStorageDays').value) || 0;
+
+                let totalFeesPhp = 0;
+                const feeDetails = [];
+
+                // --- Vessel Charges ---
+                if (permitType === "Vessel Entry" || permitType === "Tug Service") {
+                    const harborFeeUsd = grt * TARIFF["International Foreign"].harborFee;
+                    feeDetails.push({
+                        type: "Harbor Fee",
+                        description: `${grt} GRT @ $${TARIFF["International Foreign"].harborFee.toFixed(4)}/GRT`,
+                        amount: usdToPhp(harborFeeUsd)
+                    });
+                    totalFeesPhp += usdToPhp(harborFeeUsd);
+
+                    const berthingFeeUsd = grt * TARIFF["International Foreign"].berthingFee * days;
+                    feeDetails.push({
+                        type: "Berthing Fee",
+                        description: `${grt} GRT for ${days} days @ $${TARIFF["International Foreign"].berthingFee.toFixed(4)}/GRT/day`,
+                        amount: usdToPhp(berthingFeeUsd)
+                    });
+                    totalFeesPhp += usdToPhp(berthingFeeUsd);
+
+                    let harborCleaningRateUsd = 0;
+                    for (const range of TARIFF["International Foreign"].harborCleaning) {
+                        if ((range.grtMax && grt <= range.grtMax) || (range.grtMin && grt >= range.grtMin)) {
+                            harborCleaningRateUsd = range.rate;
+                            break;
+                        }
+                    }
+                    const harborCleaningFeeUsd = harborCleaningRateUsd * days;
+                    feeDetails.push({
+                        type: "Harbor Cleaning Fee",
+                        description: `Vessel ${grt} GRT for ${days} days @ $${harborCleaningRateUsd.toFixed(2)}/day`,
+                        amount: usdToPhp(harborCleaningFeeUsd)
+                    });
+                    totalFeesPhp += usdToPhp(harborCleaningFeeUsd);
+
+                    if (lineMoves > 0) {
+                        const lineHandlingFeeUsd = lineMoves * TARIFF["International Foreign"].lineHandling;
+                        feeDetails.push({
+                            type: "Line Handling",
+                            description: `${lineMoves} moves @ $${TARIFF["International Foreign"].lineHandling.toFixed(2)}/move`,
+                            amount: usdToPhp(lineHandlingFeeUsd)
+                        });
+                        totalFeesPhp += usdToPhp(lineHandlingFeeUsd);
+                    }
+                }
+
+                // --- Cargo Charges (Foreign Import 20ft FCL) ---
+                if (containerCount > 0 && (permitType === "Cargo Import" || permitType === "Cargo Export" || permitType === "Cargo Transshipment")) {
+                    const cargoTariff = TARIFF["CargoForeignFCL20ft"];
+
+                    const processingFeePhp = cargoTariff.processingFee * containerCount;
+                    feeDetails.push({
+                        type: "Cargo Processing Fee",
+                        description: `${containerCount} containers @ PHP ${cargoTariff.processingFee.toFixed(2)}/container`,
+                        amount: processingFeePhp
+                    });
+                    totalFeesPhp += processingFeePhp;
+
+                    const wharfageFeePhp = cargoTariff.wharfageFee * containerCount;
+                    feeDetails.push({
+                        type: "Cargo Wharfage Fee (20ft FCL)",
+                        description: `${containerCount} containers @ PHP ${cargoTariff.wharfageFee.toFixed(2)}/container`,
+                        amount: wharfageFeePhp
+                    });
+                    totalFeesPhp += wharfageFeePhp;
+
+                    if (cargoStorageDays > 0) {
+                        const storageFeeUsd = cargoTariff.storageFee * containerCount * cargoStorageDays;
+                        feeDetails.push({
+                            type: "Cargo Storage Fee (20ft FCL)",
+                            description: `${containerCount} containers for ${cargoStorageDays} days @ $${cargoTariff.storageFee.toFixed(2)}/container/day`,
+                            amount: usdToPhp(storageFeeUsd)
+                        });
+                        totalFeesPhp += usdToPhp(storageFeeUsd);
+                    }
+                }
+
+
+                // Update UI with calculated fees
+                const feeDetailsBody = document.getElementById('feeDetailsBody');
+                if (feeDetailsBody) {
+                    feeDetailsBody.innerHTML = ''; // Clear previous details
+                }
+
+
+                if (feeDetails.length === 0) {
+                    if (feeDetailsBody) {
+                        feeDetailsBody.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-gray-500">No fees calculated. Please check inputs.</td></tr>`;
+                    }
+                    const feeTotalFooter = document.getElementById('feeTotalFooter');
+                    if (feeTotalFooter) {
+                        feeTotalFooter.classList.add('hidden');
+                    }
+                    setPaymentButtonsState(true); // Keep payment buttons disabled if no fees
+                    displayMessage(`No fees calculated. Please adjust inputs.`, 'error', 'applicationMessage');
+                } else {
+                    feeDetails.forEach(fee => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-2 py-2 whitespace-nowrap">${fee.type}</td>
+                            <td class="px-2 py-2">${fee.description}</td>
+                            <td class="px-2 py-2 whitespace-nowrap text-right">${formatCurrency(fee.amount)}</td>
+                        `;
+                        if (feeDetailsBody) {
+                            feeDetailsBody.appendChild(row);
+                        }
+                    });
+                    const totalAmountElement = document.getElementById('totalAmount');
+                    if (totalAmountElement) {
+                        totalAmountElement.innerText = formatCurrency(totalFeesPhp);
+                    }
+                    const feeTotalFooter = document.getElementById('feeTotalFooter');
+                    if (feeTotalFooter) {
+                        feeTotalFooter.classList.remove('hidden');
+                    }
+                    setPaymentButtonsState(false); // Enable payment buttons if fees are calculated
+                    displayMessage(`Fees calculated. Ready for payment.`, 'success', 'applicationMessage');
+
+                    // Scroll to fee summary section
+                    const feeSummarySection = document.getElementById('feeSummarySection');
+                    if (feeSummarySection) {
+                        feeSummarySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+                if (calculateFeesBtn) {
+                    calculateFeesBtn.disabled = false; // Re-enable calculate fees button
+                }
+            }, 2000); // Simulate network delay for calculation
+        }
+
+        function initiatePayment(method) {
+            const totalAmountText = document.getElementById('totalAmount').innerText;
+            const totalAmountValue = parseFloat(totalAmountText.replace('PHP ', '').replace(/,/g, ''));
+
+            if (totalAmountValue === 0 || document.getElementById('feeTotalFooter').classList.contains('hidden')) {
+                displayMessage('Please calculate fees first.', 'error');
+                return;
+            }
+            if (!currentUser) {
+                displayMessage('Please login first to make a payment.', 'error', 'authMessage');
+                showSection('authSection');
+                return;
+            }
+            if (!currentTransactionId) {
+                displayMessage('No fees calculated for payment. Please calculate fees first.', 'error');
+                return;
+            }
+
+            setPaymentButtonsState(true); // Disable buttons during processing
+            document.getElementById('applicationMessage').classList.add('hidden'); // Clear application message
+            document.getElementById('paymentMessage').classList.add('hidden');     // Clear payment message
+
+            displayMessage(`Processing payment for Transaction ID ${currentTransactionId} via ${method}... Please wait.`, 'info');
+
+            // Simulate API call to payment gateway
+            setTimeout(() => {
+                const success = Math.random() > 0.1; // 90% chance of success
+
+                if (success) {
+                    displayMessage(`Payment of ${totalAmountText} via ${method} successful!`, 'success');
+                    // Record the payment
+                    allPayments.push({
+                        customer_id: currentUser.id,
+                        transaction_id: currentTransactionId,
+                        amount: totalAmountValue,
+                        date: new Date().toISOString().slice(0, 10), //YYYY-MM-DD
+                        status: "Completed"
+                    });
+
+                    // Transition to payment confirmation page
+                    const completedTransactionIdElement = document.getElementById('completedTransactionId');
+                    if (completedTransactionIdElement) {
+                        completedTransactionIdElement.innerText = currentTransactionId;
+                    }
+                    document.getElementById('paymentConfirmationSection').classList.remove('hidden');
+                    document.getElementById('mainAppSection').classList.add('hidden'); // Hide main app section
+                    document.getElementById('navbar').classList.remove('hidden'); // Keep navbar visible
+
+                } else {
+                    displayMessage(`Payment via ${method} failed for Transaction ID ${currentTransactionId}. Please try again or choose another method.`, 'error');
+                    setPaymentButtonsState(false); // Re-enable buttons on failure
+                }
+            }, 2000); // Simulate network delay
+        }
+
+        function resetForm() {
+            // Reset input values for fee calculation
+            const permitType = document.getElementById('permitType');
+            if (permitType) permitType.value = "Vessel Entry";
+            
+            const vesselName = document.getElementById('vesselName');
+            if (vesselName) vesselName.value = "";
+            
+            const grt = document.getElementById('grt');
+            if (grt) grt.value = "10000";
+            
+            const days = document.getElementById('days');
+            if (days) days.value = "3";
+            
+            const lineMoves = document.getElementById('lineMoves');
+            if (lineMoves) lineMoves.value = "2";
+            
+            const containerCount = document.getElementById('containerCount');
+            if (containerCount) containerCount.value = "5";
+            
+            const cargoStorageDays = document.getElementById('cargoStorageDays');
+            if (cargoStorageDays) cargoStorageDays.value = "7";
+
+            // Clear fee summary display
+            const feeDetailsBody = document.getElementById('feeDetailsBody');
+            if (feeDetailsBody) {
+                feeDetailsBody.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-gray-500">Enter details and click "Calculate Fees" to see the summary.</td></tr>`;
+            }
+            const feeTotalFooter = document.getElementById('feeTotalFooter');
+            if (feeTotalFooter) {
+                feeTotalFooter.classList.add('hidden');
+            }
+            const totalAmount = document.getElementById('totalAmount');
+            if (totalAmount) {
+                totalAmount.innerText = "PHP 0.00";
+            }
+
+            // Clear messages and hide specific sections
+            const applicationMessage = document.getElementById('applicationMessage');
+            if (applicationMessage) {
+                applicationMessage.classList.add('hidden');
+                applicationMessage.innerHTML = '';
+            }
+            const paymentMessage = document.getElementById('paymentMessage');
+            if (paymentMessage) {
+                paymentMessage.classList.add('hidden');
+                paymentMessage.innerHTML = '';
+            }
+            
+            currentTransactionId = ''; // Clear current transaction ID
+
+            // Ensure correct section visibility
+            document.getElementById('mainAppSection').classList.remove('hidden'); // Show main app section
+            document.getElementById('paymentConfirmationSection').classList.add('hidden'); // Hide confirmation page
+
+            // Re-enable buttons for a new calculation
+            const calculateFeesBtn = document.getElementById('feeCalculationInputsSection')?.querySelector('button');
+            if (calculateFeesBtn) {
+                calculateFeesBtn.disabled = false; // Re-enable calculate fees button
+            }
+            setPaymentButtonsState(true); // Payment buttons should be disabled until fees are calculated again
+        }
+
+        // Initial state: show authentication section
+        window.onload = () => showSection('authSection');
+    </script>
+</body>
+</html>
