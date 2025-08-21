@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DFMIIS Process Flow Visualizer</title>
+    <title>DFMIIS Key Processes Visualizer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,184 +91,71 @@
         .flow-node.bg-blue-100 { background-color: #dbeafe; }
         .flow-node.bg-red-100 { background-color: #fca5a5; }
         .flow-node.bg-gray-100 { background-color: #f3f4f6; }
+        
+        /* Responsive changes for small screens */
+        @media (max-width: 768px) {
+            .flow-container {
+                flex-direction: column;
+                flex-wrap: nowrap;
+                align-items: stretch;
+            }
+            .flow-node {
+                min-width: 90%;
+                margin: 0.5rem 0;
+            }
+            .flow-connector {
+                width: 4px;
+                height: 30px;
+                min-width: 0;
+            }
+            .flow-connector::after {
+                width: 4px;
+                height: 100%;
+            }
+            .flow-connector .fa-arrow-right {
+                transform: rotate(90deg);
+            }
+        }
     </style>
 </head>
 <body class="p-4 sm:p-8">
     <div class="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow-lg">
         <header class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 text-center">DFMIIS Process Flow Visualizer</h1>
-            <p class="text-center text-gray-500 mt-2">A guide to the standard financial and operational processes for scoping.</p>
+            <h1 class="text-3xl font-bold text-gray-800 text-center">DFMIIS Key Processes Visualizer</h1>
+            <p class="text-center text-gray-500 mt-2">A high-level guide to the core processes within each module.</p>
         </header>
 
         <!-- Process Flow Container -->
         <div id="process-flows">
-            <!-- Process 1: Journal Entry Creation and Approval -->
-            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
-                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">1. Journal Entry Creation and Approval</h2>
-                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
-                </div>
-                <div class="accordion-content p-6">
-                    <div class="flow-container">
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Request JE</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-pencil-alt icon icon-action"></i>
-                            <span class="font-medium text-sm">Draft JE & attach docs</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node decision-node">
-                            <i class="fas fa-question-circle icon icon-decision"></i>
-                            <span class="font-medium text-sm">Is JE approved?</span>
-                            <div class="absolute -right-16 -top-1/2 mt-1"><span class="text-xs font-bold text-green-600">Yes</span></div>
-                            <div class="absolute -right-20 mt-1"><span class="text-xs font-bold text-red-600">No</span></div>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-check-circle icon icon-action"></i>
-                            <span class="font-medium text-sm">Post to General Ledger</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Process 2: Invoice Processing and Approval (AP) -->
+            <!-- 1. Government Procurement Management -->
             <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
                 <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">2. Invoice Processing and Approval (AP)</h2>
+                    <h2 class="text-lg font-semibold text-gray-700">1. Government Procurement Management</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
                 <div class="accordion-content p-6">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Receive invoice</span>
+                            <span class="font-medium text-sm">START: Project Plan</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-search icon icon-action"></i>
-                            <span class="font-medium text-sm">Validate against PO & receiving report</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node decision-node">
-                            <i class="fas fa-question-circle icon icon-decision"></i>
-                            <span class="font-medium text-sm">Documents match?</span>
-                            <div class="absolute -right-16 -top-1/2 mt-1"><span class="text-xs font-bold text-green-600">Yes</span></div>
-                            <div class="absolute -right-20 mt-1"><span class="text-xs font-bold text-red-600">No</span></div>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-user-check icon icon-action"></i>
-                            <span class="font-medium text-sm">Route for approval</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Process 3: Vendor Payment Processing (AP) -->
-            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
-                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">3. Vendor Payment Processing (AP)</h2>
-                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
-                </div>
-                <div class="accordion-content p-6">
-                    <div class="flow-container">
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Approved invoice</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-file-invoice-dollar icon icon-action"></i>
-                            <span class="font-medium text-sm">Generate payment instruction</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-money-check-alt icon icon-action"></i>
-                            <span class="font-medium text-sm">Execute payment</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Process 4: Invoice Generation and Issuance (AR) -->
-            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
-                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">4. Invoice Generation and Issuance (AR)</h2>
-                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
-                </div>
-                <div class="accordion-content p-6">
-                    <div class="flow-container">
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Service rendered</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-file-invoice icon icon-action"></i>
-                            <span class="font-medium text-sm">Generate customer invoice</span>
+                            <span class="font-medium text-sm">Create Purchase Request</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node decision-node">
-                            <i class="fas fa-question-circle icon icon-decision"></i>
-                            <span class="font-medium text-sm">Is invoice validated?</span>
-                            <div class="absolute -right-16 -top-1/2 mt-1"><span class="text-xs font-bold text-green-600">Yes</span></div>
-                            <div class="absolute -right-20 mt-1"><span class="text-xs font-bold text-red-600">No</span></div>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
-                            <i class="fas fa-paper-plane icon icon-action"></i>
-                            <span class="font-medium text-sm">Issue invoice to client</span>
+                            <i class="fas fa-search-dollar icon icon-action"></i>
+                            <span class="font-medium text-sm">Solicit Quotations</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node action-node">
+                            <i class="fas fa-handshake icon icon-action"></i>
+                            <span class="font-medium text-sm">Generate Purchase Order</span>
                         </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
                             <span class="font-medium text-sm">END</span>
@@ -277,208 +164,34 @@
                 </div>
             </div>
 
-            <!-- Process 5: Collections Management (AR) -->
+            <!-- 2. Government Asset Management -->
             <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
                 <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">5. Collections Management (AR)</h2>
+                    <h2 class="text-lg font-semibold text-gray-700">2. Government Asset Management</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
                 <div class="accordion-content p-6">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Invoice is overdue</span>
+                            <span class="font-medium text-sm">START: Asset Acquisition</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
-                            <i class="fas fa-bell icon icon-action"></i>
-                            <span class="font-medium text-sm">Send automated reminder</span>
+                            <i class="fas fa-qrcode icon icon-action"></i>
+                            <span class="font-medium text-sm">Tag with QR/Geotag</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node decision-node">
-                            <i class="fas fa-question-circle icon icon-decision"></i>
-                            <span class="font-medium text-sm">Payment received?</span>
-                            <div class="absolute -right-16 -top-1/2 mt-1"><span class="text-xs font-bold text-green-600">Yes</span></div>
-                            <div class="absolute -right-20 mt-1"><span class="text-xs font-bold text-red-600">No</span></div>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
-                            <i class="fas fa-user-times icon icon-action"></i>
-                            <span class="font-medium text-sm">Escalate to next collections step</span>
+                            <i class="fas fa-map-marked-alt icon icon-action"></i>
+                            <span class="font-medium text-sm">Track Movement</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Process 6: Payroll Processing and Disbursal -->
-            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
-                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">6. Payroll Processing and Disbursal</h2>
-                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
-                </div>
-                <div class="accordion-content p-6">
-                    <div class="flow-container">
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Payroll period ends</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
-                            <i class="fas fa-file-upload icon icon-action"></i>
-                            <span class="font-medium text-sm">Collect timesheets & expenses</span>
+                            <i class="fas fa-trash-alt icon icon-action"></i>
+                            <span class="font-medium text-sm">Retire/Dispose</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-calculator icon icon-action"></i>
-                            <span class="font-medium text-sm">Calculate pay & deductions</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-paper-plane icon icon-action"></i>
-                            <span class="font-medium text-sm">Disburse payments</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Process 7: Employee Onboarding and Offboarding (HRIS) -->
-            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
-                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">7. Employee Onboarding and Offboarding (HRIS)</h2>
-                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
-                </div>
-                <div class="accordion-content p-6">
-                    <div class="flow-container">
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Onboarding/Offboarding</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-user-plus icon icon-action"></i>
-                            <span class="font-medium text-sm">Collect employee data/docs</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-database icon icon-action"></i>
-                            <span class="font-medium text-sm">Enter into HRIS</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Process 8: Document Intake and Tagging -->
-            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
-                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">8. Document Intake and Tagging</h2>
-                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
-                </div>
-                <div class="accordion-content p-6">
-                    <div class="flow-container">
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Document received</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-upload icon icon-action"></i>
-                            <span class="font-medium text-sm">Upload into system</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-robot icon icon-action"></i>
-                            <span class="font-medium text-sm">AI extracts info & tags</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Process 9: Document Approval and Routing -->
-            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
-                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">9. Document Approval and Routing</h2>
-                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
-                </div>
-                <div class="accordion-content p-6">
-                    <div class="flow-container">
-                        <div class="flow-node start-end-node">
-                            <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Doc needs approval</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-route icon icon-action"></i>
-                            <span class="font-medium text-sm">System routes to approver</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node decision-node">
-                            <i class="fas fa-question-circle icon icon-decision"></i>
-                            <span class="font-medium text-sm">Is document approved?</span>
-                            <div class="absolute -right-16 -top-1/2 mt-1"><span class="text-xs font-bold text-green-600">Yes</span></div>
-                            <div class="absolute -right-20 mt-1"><span class="text-xs font-bold text-red-600">No</span></div>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node action-node">
-                            <i class="fas fa-check-circle icon icon-action"></i>
-                            <span class="font-medium text-sm">Route to next step</span>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
                             <span class="font-medium text-sm">END</span>
@@ -487,35 +200,29 @@
                 </div>
             </div>
 
-            <!-- Process 10: Contract Lifecycle Management -->
+            <!-- 3. Government Financials -->
             <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
                 <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">10. Contract Lifecycle Management</h2>
+                    <h2 class="text-lg font-semibold text-gray-700">3. Government Financials</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
                 <div class="accordion-content p-6">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Contract requested</span>
+                            <span class="font-medium text-sm">START: JE/Transaction</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
-                            <i class="fas fa-file-contract icon icon-action"></i>
-                            <span class="font-medium text-sm">Draft contract</span>
+                            <i class="fas fa-edit icon icon-action"></i>
+                            <span class="font-medium text-sm">Post to General Ledger</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
-                            <i class="fas fa-search-plus icon icon-action"></i>
-                            <span class="font-medium text-sm">Review & Finalize</span>
+                            <i class="fas fa-file-alt icon icon-action"></i>
+                            <span class="font-medium text-sm">Generate Reports (BIR/COA)</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
                             <span class="font-medium text-sm">END</span>
@@ -524,35 +231,29 @@
                 </div>
             </div>
 
-            <!-- Process 11: Generation of Financial Statements -->
+            <!-- 4. Budget & Financial Management -->
             <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
                 <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">11. Generation of Financial Statements</h2>
+                    <h2 class="text-lg font-semibold text-gray-700">4. Budget & Financial Management</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
                 <div class="accordion-content p-6">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Period close</span>
+                            <span class="font-medium text-sm">START: Budget Creation</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
-                            <i class="fas fa-table icon icon-action"></i>
-                            <span class="font-medium text-sm">Consolidate all data</span>
+                            <i class="fas fa-link icon icon-action"></i>
+                            <span class="font-medium text-sm">Link to Procurement Module</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
-                            <i class="fas fa-chart-line icon icon-action"></i>
-                            <span class="font-medium text-sm">Generate reports</span>
+                            <i class="fas fa-chart-bar icon icon-action"></i>
+                            <span class="font-medium text-sm">Monitor in Real-Time</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
                             <span class="font-medium text-sm">END</span>
@@ -561,44 +262,96 @@
                 </div>
             </div>
 
-            <!-- Process 12: Inter-Departmental Reconciliation -->
+            <!-- 5. Government Billing & Collection -->
             <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
                 <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-700">12. Inter-Departmental Reconciliation</h2>
+                    <h2 class="text-lg font-semibold text-gray-700">5. Government Billing & Collection</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
                 <div class="accordion-content p-6">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Need to reconcile</span>
+                            <span class="font-medium text-sm">START: Service Provided</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node action-node">
+                            <i class="fas fa-file-invoice icon icon-action"></i>
+                            <span class="font-medium text-sm">Generate Invoice</span>
                         </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node action-node">
+                            <i class="fas fa-credit-card icon icon-action"></i>
+                            <span class="font-medium text-sm">Process Payment (Online/POS)</span>
+                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node action-node">
+                            <i class="fas fa-receipt icon icon-action"></i>
+                            <span class="font-medium text-sm">Issue E-Receipt</span>
+                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node start-end-node">
+                            <i class="fas fa-stop-circle icon icon-start-end"></i>
+                            <span class="font-medium text-sm">END</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 6. Contracts Management -->
+            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
+                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
+                    <h2 class="text-lg font-semibold text-gray-700">6. Contracts Management</h2>
+                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
+                </div>
+                <div class="accordion-content p-6">
+                    <div class="flow-container">
+                        <div class="flow-node start-end-node">
+                            <i class="fas fa-play-circle icon icon-start-end"></i>
+                            <span class="font-medium text-sm">START: Contract Request</span>
+                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node action-node">
+                            <i class="fas fa-file-signature icon icon-action"></i>
+                            <span class="font-medium text-sm">Draft & Review</span>
+                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node action-node">
+                            <i class="fas fa-tasks icon icon-action"></i>
+                            <span class="font-medium text-sm">Monitor Status & Payments</span>
+                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node start-end-node">
+                            <i class="fas fa-stop-circle icon icon-start-end"></i>
+                            <span class="font-medium text-sm">END</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Digital Business One-Stop-Shop -->
+            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
+                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
+                    <h2 class="text-lg font-semibold text-gray-700">7. Digital Business One-Stop-Shop</h2>
+                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
+                </div>
+                <div class="accordion-content p-6">
+                    <div class="flow-container">
+                        <div class="flow-node start-end-node">
+                            <i class="fas fa-play-circle icon icon-start-end"></i>
+                            <span class="font-medium text-sm">START: Application Received</span>
+                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-exchange-alt icon icon-action"></i>
-                            <span class="font-medium text-sm">Run & compare reports</span>
+                            <span class="font-medium text-sm">Integrate with DTI/SEC</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="flow-node decision-node">
-                            <i class="fas fa-question-circle icon icon-decision"></i>
-                            <span class="font-medium text-sm">Are there discrepancies?</span>
-                            <div class="absolute -right-16 -top-1/2 mt-1"><span class="text-xs font-bold text-green-600">Yes</span></div>
-                            <div class="absolute -right-20 mt-1"><span class="text-xs font-bold text-red-600">No</span></div>
-                        </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
-                            <i class="fas fa-search-location icon icon-action"></i>
-                            <span class="font-medium text-sm">Investigate discrepancy</span>
+                            <i class="fas fa-certificate icon icon-action"></i>
+                            <span class="font-medium text-sm">Process & Issue Permits</span>
                         </div>
-                        <div class="flow-connector">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
                             <span class="font-medium text-sm">END</span>
@@ -607,6 +360,37 @@
                 </div>
             </div>
 
+            <!-- 8. Document Management Platform -->
+            <div class="accordion-item my-4 rounded-xl overflow-hidden shadow-md">
+                <div class="accordion-header p-5 bg-gray-50 cursor-pointer flex justify-between items-center transition duration-300 hover:bg-gray-100">
+                    <h2 class="text-lg font-semibold text-gray-700">8. Document Management Platform</h2>
+                    <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
+                </div>
+                <div class="accordion-content p-6">
+                    <div class="flow-container">
+                        <div class="flow-node start-end-node">
+                            <i class="fas fa-play-circle icon icon-start-end"></i>
+                            <span class="font-medium text-sm">START: Document Received</span>
+                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node action-node">
+                            <i class="fas fa-robot icon icon-action"></i>
+                            <span class="font-medium text-sm">Auto Tag & Classify</span>
+                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node action-node">
+                            <i class="fas fa-route icon icon-action"></i>
+                            <span class="font-medium text-sm">Route for Processing</span>
+                        </div>
+                        <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-node start-end-node">
+                            <i class="fas fa-stop-circle icon icon-start-end"></i>
+                            <span class="font-medium text-sm">END</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
 
