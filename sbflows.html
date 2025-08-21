@@ -32,7 +32,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 1rem 0;
+            padding: 0.5rem 0;
         }
         .flow-node {
             display: flex;
@@ -40,20 +40,20 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 1rem;
+            padding: 0.75rem;
             border-radius: 0.75rem;
-            width: 90%;
-            margin-bottom: 1.5rem;
+            width: 95%;
+            margin-bottom: 0.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             position: relative;
         }
         .flow-node h3 {
             font-weight: 600;
             text-align: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
         .flow-node p, .flow-node ul {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             text-align: left;
             width: 100%;
             margin: 0;
@@ -68,13 +68,13 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            height: 40px;
-            width: 4px;
+            height: 30px;
+            width: 3px;
         }
         .flow-connector::after {
             content: '';
             height: 100%;
-            width: 4px;
+            width: 3px;
             background-color: #d1d5db;
             position: absolute;
             top: 50%;
@@ -82,7 +82,7 @@
         }
         .flow-connector .fa-arrow-right {
             color: #6b7280;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             transform: rotate(90deg);
             z-index: 10;
         }
@@ -96,8 +96,8 @@
             background-color: #a7f3d0;
         }
         .icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
         }
         .icon-action { color: #2563eb; }
         .icon-decision { color: #b91c1c; }
@@ -125,20 +125,20 @@
                     <h2 class="text-lg font-semibold text-gray-700">1. Government Procurement Management</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
-                <div class="accordion-content p-6">
+                <div class="accordion-content p-4">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
                             <h3 class="font-medium">START: Project Plan</h3>
-                            <p><strong>Documents:</strong> Project Procurement Management Plan (PPMP), Annual Procurement Plan (APP)</p>
+                            <p><strong>Documents:</strong> PPMP, APP</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-file-invoice icon icon-action"></i>
                             <h3>Create Purchase Request</h3>
                             <p><strong>Key Task:</strong> Drafting & Approval</p>
-                            <p><strong>Documents:</strong> Purchase Request (PR), Agency Procurement Request (APR)</p>
-                            <p><strong>Personnel:</strong> Department Head, Requisitioning Officer</p>
+                            <p><strong>Documents:</strong> PR, APR</p>
+                            <p><strong>Personnel:</strong> Dept. Head, Requisitioning Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
@@ -146,14 +146,14 @@
                             <h3>Solicit Quotations</h3>
                             <p><strong>Key Task:</strong> Issuing RFQ, Canvassing</p>
                             <p><strong>Documents:</strong> Abstract of Canvass, Purchase Quotation</p>
-                            <p><strong>Personnel:</strong> Bids and Awards Committee (BAC) Secretariat</p>
+                            <p><strong>Personnel:</strong> BAC Secretariat</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-handshake icon icon-action"></i>
                             <h3>Generate Purchase Order</h3>
                             <p><strong>Key Task:</strong> Awarding & PO Generation</p>
-                            <p><strong>Documents:</strong> Purchase Order (PO), Job Order (JO)</p>
+                            <p><strong>Documents:</strong> PO, JO</p>
                             <p><strong>Personnel:</strong> Approving Authority, Procurement Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
@@ -171,7 +171,7 @@
                     <h2 class="text-lg font-semibold text-gray-700">2. Government Asset Management</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
-                <div class="accordion-content p-6">
+                <div class="accordion-content p-4">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
@@ -182,7 +182,7 @@
                             <i class="fas fa-qrcode icon icon-action"></i>
                             <h3>Tag with QR/Geotag</h3>
                             <p><strong>Key Task:</strong> Physical Tagging, Data Entry</p>
-                            <p><strong>Documents:</strong> Inventory Custodian Slip (ICS), Property Card</p>
+                            <p><strong>Documents:</strong> ICS, Property Card</p>
                             <p><strong>Personnel:</strong> Property Officer, End-User</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
@@ -216,7 +216,7 @@
                     <h2 class="text-lg font-semibold text-gray-700">3. Government Financials</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
-                <div class="accordion-content p-6">
+                <div class="accordion-content p-4">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
@@ -253,7 +253,7 @@
                     <h2 class="text-lg font-semibold text-gray-700">4. Budget & Financial Management</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
-                <div class="accordion-content p-6">
+                <div class="accordion-content p-4">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
@@ -290,7 +290,7 @@
                     <h2 class="text-lg font-semibold text-gray-700">5. Government Billing & Collection</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
-                <div class="accordion-content p-6">
+                <div class="accordion-content p-4">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
@@ -335,7 +335,7 @@
                     <h2 class="text-lg font-semibold text-gray-700">6. Contracts Management</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
-                <div class="accordion-content p-6">
+                <div class="accordion-content p-4">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
@@ -372,7 +372,7 @@
                     <h2 class="text-lg font-semibold text-gray-700">7. Digital Business One-Stop-Shop</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
-                <div class="accordion-content p-6">
+                <div class="accordion-content p-4">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
@@ -409,7 +409,7 @@
                     <h2 class="text-lg font-semibold text-gray-700">8. Document Management Platform</h2>
                     <i class="fas fa-chevron-down accordion-icon text-gray-500"></i>
                 </div>
-                <div class="accordion-content p-6">
+                <div class="accordion-content p-4">
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
