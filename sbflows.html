@@ -20,7 +20,7 @@
             transition: max-height 0.5s ease-in-out;
         }
         .accordion-item.active .accordion-content {
-            max-height: 1000px; /* A large value to accommodate content */
+            max-height: 2000px; /* A large value to accommodate content */
         }
         .accordion-icon {
             transition: transform 0.3s ease-in-out;
@@ -30,9 +30,8 @@
         }
         .flow-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: nowrap;
-            overflow-x: auto;
             padding: 1rem 0;
         }
         .flow-node {
@@ -43,8 +42,8 @@
             text-align: center;
             padding: 1rem;
             border-radius: 0.75rem;
-            min-width: 150px;
-            flex-shrink: 0;
+            width: 90%;
+            margin-bottom: 1.5rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             position: relative;
         }
@@ -56,6 +55,7 @@
         .flow-node p, .flow-node ul {
             font-size: 0.8rem;
             text-align: left;
+            width: 100%;
             margin: 0;
         }
         .flow-node ul {
@@ -68,12 +68,13 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            min-width: 50px;
+            height: 40px;
+            width: 4px;
         }
         .flow-connector::after {
             content: '';
-            width: 100%;
-            height: 4px;
+            height: 100%;
+            width: 4px;
             background-color: #d1d5db;
             position: absolute;
             top: 50%;
@@ -82,6 +83,7 @@
         .flow-connector .fa-arrow-right {
             color: #6b7280;
             font-size: 1.5rem;
+            transform: rotate(90deg);
             z-index: 10;
         }
         .decision-node {
@@ -105,31 +107,6 @@
         .flow-node.bg-blue-100 { background-color: #dbeafe; }
         .flow-node.bg-red-100 { background-color: #fca5a5; }
         .flow-node.bg-gray-100 { background-color: #f3f4f6; }
-        
-        /* Responsive changes for small screens */
-        @media (max-width: 768px) {
-            .flow-container {
-                flex-direction: column;
-                flex-wrap: nowrap;
-                align-items: stretch;
-            }
-            .flow-node {
-                min-width: 90%;
-                margin: 0.5rem 0;
-            }
-            .flow-connector {
-                width: 4px;
-                height: 30px;
-                min-width: 0;
-            }
-            .flow-connector::after {
-                width: 4px;
-                height: 100%;
-            }
-            .flow-connector .fa-arrow-right {
-                transform: rotate(90deg);
-            }
-        }
     </style>
 </head>
 <body class="p-4 sm:p-8">
@@ -493,3 +470,4 @@
     </script>
 </body>
 </html>
+
