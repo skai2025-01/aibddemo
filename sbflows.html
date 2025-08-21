@@ -48,6 +48,20 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             position: relative;
         }
+        .flow-node h3 {
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .flow-node p, .flow-node ul {
+            font-size: 0.8rem;
+            text-align: left;
+            margin: 0;
+        }
+        .flow-node ul {
+            list-style: none;
+            padding-left: 0;
+        }
         .flow-connector {
             flex-grow: 1;
             display: flex;
@@ -138,27 +152,37 @@
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Project Plan</span>
+                            <h3 class="font-medium">START: Project Plan</h3>
+                            <p><strong>Documents:</strong> Project Procurement Management Plan (PPMP), Annual Procurement Plan (APP)</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-file-invoice icon icon-action"></i>
-                            <span class="font-medium text-sm">Create Purchase Request</span>
+                            <h3>Create Purchase Request</h3>
+                            <p><strong>Key Task:</strong> Drafting & Approval</p>
+                            <p><strong>Documents:</strong> Purchase Request (PR), Agency Procurement Request (APR)</p>
+                            <p><strong>Personnel:</strong> Department Head, Requisitioning Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-search-dollar icon icon-action"></i>
-                            <span class="font-medium text-sm">Solicit Quotations</span>
+                            <h3>Solicit Quotations</h3>
+                            <p><strong>Key Task:</strong> Issuing RFQ, Canvassing</p>
+                            <p><strong>Documents:</strong> Abstract of Canvass, Purchase Quotation</p>
+                            <p><strong>Personnel:</strong> Bids and Awards Committee (BAC) Secretariat</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-handshake icon icon-action"></i>
-                            <span class="font-medium text-sm">Generate Purchase Order</span>
+                            <h3>Generate Purchase Order</h3>
+                            <p><strong>Key Task:</strong> Awarding & PO Generation</p>
+                            <p><strong>Documents:</strong> Purchase Order (PO), Job Order (JO)</p>
+                            <p><strong>Personnel:</strong> Approving Authority, Procurement Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
+                            <h3 class="font-medium">END</h3>
                         </div>
                     </div>
                 </div>
@@ -174,27 +198,36 @@
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Asset Acquisition</span>
+                            <h3 class="font-medium">START: Asset Acquisition</h3>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-qrcode icon icon-action"></i>
-                            <span class="font-medium text-sm">Tag with QR/Geotag</span>
+                            <h3>Tag with QR/Geotag</h3>
+                            <p><strong>Key Task:</strong> Physical Tagging, Data Entry</p>
+                            <p><strong>Documents:</strong> Inventory Custodian Slip (ICS), Property Card</p>
+                            <p><strong>Personnel:</strong> Property Officer, End-User</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-map-marked-alt icon icon-action"></i>
-                            <span class="font-medium text-sm">Track Movement</span>
+                            <h3>Track Movement</h3>
+                            <p><strong>Key Task:</strong> Transferring Assets, Updating Records</p>
+                            <p><strong>Documents:</strong> Property Transfer Slip</p>
+                            <p><strong>Personnel:</strong> End-User, Property Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-trash-alt icon icon-action"></i>
-                            <span class="font-medium text-sm">Retire/Dispose</span>
+                            <h3>Retire/Dispose</h3>
+                            <p><strong>Key Task:</strong> Decommissioning, Disposal</p>
+                            <p><strong>Documents:</strong> Disposal Report, Waste Material Report</p>
+                            <p><strong>Personnel:</strong> Property Officer, Disposal Committee</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
+                            <h3 class="font-medium">END</h3>
                         </div>
                     </div>
                 </div>
@@ -210,22 +243,28 @@
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: JE/Transaction</span>
+                            <h3 class="font-medium">START: JE/Transaction</h3>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-edit icon icon-action"></i>
-                            <span class="font-medium text-sm">Post to General Ledger</span>
+                            <h3>Post to General Ledger</h3>
+                            <p><strong>Key Task:</strong> Posting Journal Entries, Reconciliation</p>
+                            <p><strong>Documents:</strong> Journal Vouchers, Ledgers</p>
+                            <p><strong>Personnel:</strong> Accountant, Bookkeeper</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-file-alt icon icon-action"></i>
-                            <span class="font-medium text-sm">Generate Reports (BIR/COA)</span>
+                            <h3>Generate Reports (BIR/COA)</h3>
+                            <p><strong>Key Task:</strong> Data Extraction, Report Generation</p>
+                            <p><strong>Documents:</strong> G/L Register, Trial Balance, BIR Forms</p>
+                            <p><strong>Personnel:</strong> Accountant, Auditor</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
+                            <h3 class="font-medium">END</h3>
                         </div>
                     </div>
                 </div>
@@ -241,22 +280,28 @@
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Budget Creation</span>
+                            <h3 class="font-medium">START: Budget Creation</h3>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-link icon icon-action"></i>
-                            <span class="font-medium text-sm">Link to Procurement Module</span>
+                            <h3>Link to Procurement Module</h3>
+                            <p><strong>Key Task:</strong> Budget Obligation Check</p>
+                            <p><strong>Documents:</strong> Budget Allocation Report</p>
+                            <p><strong>Personnel:</strong> Budget Officer, Procurement Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-chart-bar icon icon-action"></i>
-                            <span class="font-medium text-sm">Monitor in Real-Time</span>
+                            <h3>Monitor in Real-Time</h3>
+                            <p><strong>Key Task:</strong> Budget Utilization Tracking</p>
+                            <p><strong>Documents:</strong> Budget Execution Report</p>
+                            <p><strong>Personnel:</strong> Management, Budget Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
+                            <h3 class="font-medium">END</h3>
                         </div>
                     </div>
                 </div>
@@ -272,27 +317,36 @@
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Service Provided</span>
+                            <h3 class="font-medium">START: Service Provided</h3>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-file-invoice icon icon-action"></i>
-                            <span class="font-medium text-sm">Generate Invoice</span>
+                            <h3>Generate Invoice</h3>
+                            <p><strong>Key Task:</strong> Assessment & Invoicing</p>
+                            <p><strong>Documents:</strong> Invoice, Statement of Account</p>
+                            <p><strong>Personnel:</strong> Billing Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-credit-card icon icon-action"></i>
-                            <span class="font-medium text-sm">Process Payment (Online/POS)</span>
+                            <h3>Process Payment</h3>
+                            <p><strong>Key Task:</strong> Payment Receipt, Validation</p>
+                            <p><strong>Documents:</strong> Payment Remittance</p>
+                            <p><strong>Personnel:</strong> Cashier, Collecting Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-receipt icon icon-action"></i>
-                            <span class="font-medium text-sm">Issue E-Receipt</span>
+                            <h3>Issue E-Receipt</h3>
+                            <p><strong>Key Task:</strong> Electronic Receipt Generation</p>
+                            <p><strong>Documents:</strong> Official Receipt, Electronic Receipt</p>
+                            <p><strong>Personnel:</strong> Cashier, Collecting Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
+                            <h3 class="font-medium">END</h3>
                         </div>
                     </div>
                 </div>
@@ -308,22 +362,28 @@
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Contract Request</span>
+                            <h3 class="font-medium">START: Contract Request</h3>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-file-signature icon icon-action"></i>
-                            <span class="font-medium text-sm">Draft & Review</span>
+                            <h3>Draft & Review</h3>
+                            <p><strong>Key Task:</strong> Drafting, Legal Review</p>
+                            <p><strong>Documents:</strong> Draft Contract, Contract Checklist</p>
+                            <p><strong>Personnel:</strong> Legal Officer, Contract Manager</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-tasks icon icon-action"></i>
-                            <span class="font-medium text-sm">Monitor Status & Payments</span>
+                            <h3>Monitor Status & Payments</h3>
+                            <p><strong>Key Task:</strong> Milestone & Payment Tracking</p>
+                            <p><strong>Documents:</strong> Payment Request, Status Report</p>
+                            <p><strong>Personnel:</strong> Project Manager, Accountant</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
+                            <h3 class="font-medium">END</h3>
                         </div>
                     </div>
                 </div>
@@ -339,22 +399,28 @@
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Application Received</span>
+                            <h3 class="font-medium">START: Application Received</h3>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-exchange-alt icon icon-action"></i>
-                            <span class="font-medium text-sm">Integrate with DTI/SEC</span>
+                            <h3>Integrate with DTI/SEC</h3>
+                            <p><strong>Key Task:</strong> Real-time Data Validation</p>
+                            <p><strong>Documents:</strong> Business Permit Application</p>
+                            <p><strong>Personnel:</strong> Licensing Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-certificate icon icon-action"></i>
-                            <span class="font-medium text-sm">Process & Issue Permits</span>
+                            <h3>Process & Issue Permits</h3>
+                            <p><strong>Key Task:</strong> Verification, Approval</p>
+                            <p><strong>Documents:</strong> Business Permit, License</p>
+                            <p><strong>Personnel:</strong> Approving Authority, Licensing Officer</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
+                            <h3 class="font-medium">END</h3>
                         </div>
                     </div>
                 </div>
@@ -370,22 +436,28 @@
                     <div class="flow-container">
                         <div class="flow-node start-end-node">
                             <i class="fas fa-play-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">START: Document Received</span>
+                            <h3 class="font-medium">START: Document Received</h3>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-robot icon icon-action"></i>
-                            <span class="font-medium text-sm">Auto Tag & Classify</span>
+                            <h3>Auto Tag & Classify</h3>
+                            <p><strong>Key Task:</strong> OCR Scanning, Metadata Extraction</p>
+                            <p><strong>Documents:</strong> All Incoming Documents</p>
+                            <p><strong>Personnel:</strong> System Administrator</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node action-node">
                             <i class="fas fa-route icon icon-action"></i>
-                            <span class="font-medium text-sm">Route for Processing</span>
+                            <h3>Route for Processing</h3>
+                            <p><strong>Key Task:</strong> Workflow Routing, Notifications</p>
+                            <p><strong>Documents:</strong> Routed Documents</p>
+                            <p><strong>Personnel:</strong> All Personnel</p>
                         </div>
                         <div class="flow-connector"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-node start-end-node">
                             <i class="fas fa-stop-circle icon icon-start-end"></i>
-                            <span class="font-medium text-sm">END</span>
+                            <h3 class="font-medium">END</h3>
                         </div>
                     </div>
                 </div>
